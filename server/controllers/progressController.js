@@ -1,11 +1,11 @@
-const { pool } = require('../config/db');
+const { query, insertAndGetId } = require('../config/db-universal');
 
 // @desc    Get user progress
 // @route   GET /api/progress
 // @access  Private
 exports.getUserProgress = async (req, res) => {
   try {
-    const [progress] = await pool.query(
+    const [progress] = await query(
       `SELECT up.*, c.title, c.content_type, c.thumbnail_url, c.points_reward
        FROM user_progress up
        JOIN content c ON up.content_id = c.id
@@ -37,7 +37,7 @@ exports.updateProgress = async (req, res) => {
     const contentId = req.params.contentId;
 
     // Check if content exists
-    const [content] = await pool.query(
+    const [content] = await query(
       'SELECT id, points_reward FROM content WHERE id = ?',
       [contentId]
     );
@@ -50,7 +50,7 @@ exports.updateProgress = async (req, res) => {
     }
 
     // Check existing progress
-    const [existingProgress] = await pool.query(
+    const [existingProgress] = await query(
       'SELECT * FROM user_progress WHERE user_id = ? AND content_id = ?',
       [req.user.id, contentId]
     );
@@ -60,7 +60,7 @@ exports.updateProgress = async (req, res) => {
 
     if (existingProgress.length === 0) {
       // Insert new progress
-      await pool.query(
+      await query(
         `INSERT INTO user_progress (user_id, content_id, status, progress_percentage, time_spent, notes, last_accessed, completed_at)
          VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`,
         [
@@ -75,7 +75,7 @@ exports.updateProgress = async (req, res) => {
       );
     } else {
       // Update existing progress
-      await pool.query(
+      await query(
         `UPDATE user_progress SET
           status = ?,
           progress_percentage = ?,
@@ -100,20 +100,20 @@ exports.updateProgress = async (req, res) => {
     if (isNowCompleted && !wasCompleted) {
       const pointsAwarded = content[0].points_reward || 10;
 
-      await pool.query(
+      await query(
         'UPDATE users SET total_points = total_points + ? WHERE id = ?',
         [pointsAwarded, req.user.id]
       );
 
       // Create activity
-      await pool.query(
+      await query(
         `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
          VALUES (?, 'content_completed', ?, ?)`,
         [req.user.id, JSON.stringify({ contentId }), pointsAwarded]
       );
 
       // Create notification
-      await pool.query(
+      await query(
         `INSERT INTO notifications (user_id, notification_type, title, message)
          VALUES (?, 'achievement', 'Content Completed!', ?)`,
         [req.user.id, `You earned ${pointsAwarded} points!`]
@@ -149,7 +149,7 @@ exports.updateProgress = async (req, res) => {
 exports.getUserStats = async (req, res) => {
   try {
     // Get completion stats
-    const [completionStats] = await pool.query(
+    const [completionStats] = await query(
       `SELECT
         COUNT(DISTINCT content_id) as total_completed,
         SUM(time_spent) as total_time_spent,
@@ -160,7 +160,7 @@ exports.getUserStats = async (req, res) => {
     );
 
     // Get content type breakdown
-    const [contentTypeStats] = await pool.query(
+    const [contentTypeStats] = await query(
       `SELECT c.content_type, COUNT(*) as count
        FROM user_progress up
        JOIN content c ON up.content_id = c.id
@@ -170,13 +170,13 @@ exports.getUserStats = async (req, res) => {
     );
 
     // Get badges count
-    const [badgeCount] = await pool.query(
+    const [badgeCount] = await query(
       'SELECT COUNT(*) as badge_count FROM user_badges WHERE user_id = ?',
       [req.user.id]
     );
 
     // Get current streak
-    const [streakData] = await pool.query(
+    const [streakData] = await query(
       `SELECT DATE(last_accessed) as access_date
        FROM user_progress
        WHERE user_id = ?
@@ -188,8 +188,8 @@ exports.getUserStats = async (req, res) => {
     const currentStreak = calculateStreak(streakData);
 
     // Get user rank
-    const [rankData] = await pool.query(
-      `SELECT COUNT(*) + 1 as \`rank\`
+    const [rankData] = await query(
+      `SELECT COUNT(*) + 1 as "rank"
        FROM users
        WHERE total_points > (SELECT total_points FROM users WHERE id = ?)`,
       [req.user.id]
@@ -250,7 +250,7 @@ function calculateStreak(streakData) {
 
 // Helper function to check and update user level
 async function checkAndUpdateLevel(userId) {
-  const [user] = await pool.query(
+  const [user] = await query(
     'SELECT total_points, level FROM users WHERE id = ?',
     [userId]
   );
@@ -264,20 +264,20 @@ async function checkAndUpdateLevel(userId) {
   const newLevel = Math.floor(points / 100) + 1;
 
   if (newLevel > currentLevel) {
-    await pool.query(
+    await query(
       'UPDATE users SET level = ? WHERE id = ?',
       [newLevel, userId]
     );
 
     // Create level up activity
-    await pool.query(
+    await query(
       `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
        VALUES (?, 'level_up', ?, 0)`,
       [userId, JSON.stringify({ newLevel })]
     );
 
     // Create notification
-    await pool.query(
+    await query(
       `INSERT INTO notifications (user_id, notification_type, title, message)
        VALUES (?, 'achievement', 'Level Up!', ?)`,
       [userId, `Congratulations! You reached level ${newLevel}`]
@@ -288,13 +288,13 @@ async function checkAndUpdateLevel(userId) {
 // Helper function to check badge achievements
 async function checkBadgeAchievements(userId) {
   // Get all active badges with requirements
-  const [badges] = await pool.query(
+  const [badges] = await query(
     'SELECT * FROM badges WHERE is_active = true'
   );
 
   for (const badge of badges) {
     // Check if user already has this badge
-    const [existingBadge] = await pool.query(
+    const [existingBadge] = await query(
       'SELECT id FROM user_badges WHERE user_id = ? AND badge_id = ?',
       [userId, badge.id]
     );
@@ -306,7 +306,7 @@ async function checkBadgeAchievements(userId) {
     // Check requirement based on type
     switch (badge.requirement_type) {
       case 'points':
-        const [userPoints] = await pool.query(
+        const [userPoints] = await query(
           'SELECT total_points FROM users WHERE id = ?',
           [userId]
         );
@@ -316,7 +316,7 @@ async function checkBadgeAchievements(userId) {
         break;
 
       case 'content_complete':
-        const [completedCount] = await pool.query(
+        const [completedCount] = await query(
           'SELECT COUNT(*) as count FROM user_progress WHERE user_id = ? AND status = "completed"',
           [userId]
         );
@@ -332,28 +332,28 @@ async function checkBadgeAchievements(userId) {
 
     if (earned) {
       // Award badge
-      await pool.query(
+      await query(
         'INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)',
         [userId, badge.id]
       );
 
       // Award points
       if (badge.points_reward > 0) {
-        await pool.query(
+        await query(
           'UPDATE users SET total_points = total_points + ? WHERE id = ?',
           [badge.points_reward, userId]
         );
       }
 
       // Create activity
-      await pool.query(
+      await query(
         `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
          VALUES (?, 'badge_earned', ?, ?)`,
         [userId, JSON.stringify({ badgeId: badge.id, badgeName: badge.name }), badge.points_reward]
       );
 
       // Create notification
-      await pool.query(
+      await query(
         `INSERT INTO notifications (user_id, notification_type, title, message)
          VALUES (?, 'badge', 'New Badge Earned!', ?)`,
         [userId, `You earned the "${badge.name}" badge!`]
@@ -365,7 +365,7 @@ async function checkBadgeAchievements(userId) {
 // Helper function to update challenge progress
 async function updateChallengeProgress(userId, actionType) {
   // Get active challenges for user
-  const [userChallenges] = await pool.query(
+  const [userChallenges] = await query(
     `SELECT uc.*, c.objective, c.target_value, c.points_reward, c.badge_reward_id
      FROM user_challenges uc
      JOIN challenges c ON uc.challenge_id = c.id
@@ -380,7 +380,7 @@ async function updateChallengeProgress(userId, actionType) {
       const newProgress = userChallenge.current_progress + 1;
       const completed = newProgress >= userChallenge.target_value;
 
-      await pool.query(
+      await query(
         `UPDATE user_challenges SET
           current_progress = ?,
           status = ?,
@@ -397,7 +397,7 @@ async function updateChallengeProgress(userId, actionType) {
       if (completed) {
         // Award points
         if (userChallenge.points_reward > 0) {
-          await pool.query(
+          await query(
             'UPDATE users SET total_points = total_points + ? WHERE id = ?',
             [userChallenge.points_reward, userId]
           );
@@ -405,21 +405,21 @@ async function updateChallengeProgress(userId, actionType) {
 
         // Award badge if applicable
         if (userChallenge.badge_reward_id) {
-          await pool.query(
+          await query(
             'INSERT IGNORE INTO user_badges (user_id, badge_id) VALUES (?, ?)',
             [userId, userChallenge.badge_reward_id]
           );
         }
 
         // Create activity
-        await pool.query(
+        await query(
           `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
            VALUES (?, 'challenge_completed', ?, ?)`,
           [userId, JSON.stringify({ challengeId: userChallenge.challenge_id }), userChallenge.points_reward]
         );
 
         // Create notification
-        await pool.query(
+        await query(
           `INSERT INTO notifications (user_id, notification_type, title, message)
            VALUES (?, 'challenge', 'Challenge Completed!', ?)`,
           [userId, `You completed a challenge and earned ${userChallenge.points_reward} points!`]

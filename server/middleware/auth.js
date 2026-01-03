@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { pool } = require('../config/db');
+const { query } = require('../config/db-universal');
 
 // Protect routes - verify JWT token
 exports.protect = async (req, res, next) => {
@@ -19,7 +19,7 @@ exports.protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const [rows] = await pool.query(
+    const [rows] = await query(
       'SELECT id, username, email, role, first_name, last_name, avatar_url, total_points, level FROM users WHERE id = ? AND is_active = true',
       [decoded.id]
     );
@@ -56,7 +56,7 @@ exports.optionalAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const [rows] = await pool.query(
+    const [rows] = await query(
       'SELECT id, username, email, role, first_name, last_name, avatar_url, total_points, level FROM users WHERE id = ? AND is_active = true',
       [decoded.id]
     );

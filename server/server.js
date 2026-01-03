@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
-const { testConnection } = require('./config/db');
+const { testConnection, dbType } = require('./config/db-universal');
 const errorHandler = require('./middleware/errorHandler');
 
 // Load env vars
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? process.env.CLIENT_URL
-    : 'http://localhost:3000',
+    : ['http://localhost:3000', 'http://192.168.178.79:3000'],
   credentials: true
 }));
 
@@ -61,13 +61,16 @@ const startServer = async () => {
   try {
     await testConnection();
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
 ║   AI Literacy Server Running                       ║
 ║   Environment: ${process.env.NODE_ENV || 'development'}                            ║
+║   Database: ${dbType.toUpperCase()}                                  ║
 ║   Port: ${PORT}                                       ║
+║   Local: http://localhost:${PORT}                      ║
+║   Network: http://192.168.178.79:${PORT}               ║
 ║                                                    ║
 ╚════════════════════════════════════════════════════╝
       `);

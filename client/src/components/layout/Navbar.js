@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import {
   FaGraduationCap,
   FaBook,
-  FaTrophy,
   FaUsers,
   FaChartLine,
   FaBell,
@@ -44,7 +43,6 @@ const Navbar = () => {
   const navLinks = [
     { path: '/dashboard', label: 'Dashboard', icon: <FaChartLine /> },
     { path: '/leermaterialen', label: 'Leermaterialen', icon: <FaBook /> },
-    { path: '/badges', label: 'Badges', icon: <FaTrophy /> },
     { path: '/leaderboard', label: 'Leaderboard', icon: <FaUsers /> },
   ];
 

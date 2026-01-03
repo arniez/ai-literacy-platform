@@ -1,4 +1,4 @@
-const { pool } = require('../config/db');
+const { query: executeQuery, insertAndGetId } = require('../config/db-universal');
 
 // @desc    Get leaderboard
 // @route   GET /api/social/leaderboard
@@ -7,7 +7,7 @@ exports.getLeaderboard = async (req, res) => {
   try {
     const { limit = 50, offset = 0 } = req.query;
 
-    const [users] = await pool.query(
+    const [users] = await executeQuery(
       `SELECT u.id, u.username, u.first_name, u.last_name, u.avatar_url,
               u.total_points, u.level, u.study_program,
               CONCAT(u.first_name, ' ', u.last_name) as name,
@@ -39,7 +39,7 @@ exports.getLeaderboard = async (req, res) => {
 // @access  Public
 exports.getUserProfile = async (req, res) => {
   try {
-    const [users] = await pool.query(
+    const [users] = await executeQuery(
       `SELECT u.id, u.username, u.first_name, u.last_name, u.avatar_url,
               u.bio, u.total_points, u.level, u.study_program, u.created_at,
               (SELECT COUNT(*) FROM user_badges WHERE user_id = u.id) as badge_count,
@@ -59,7 +59,7 @@ exports.getUserProfile = async (req, res) => {
     }
 
     // Get recent activities
-    const [activities] = await pool.query(
+    const [activities] = await executeQuery(
       `SELECT * FROM user_activities
        WHERE user_id = ? AND is_public = true
        ORDER BY created_at DESC
@@ -68,7 +68,7 @@ exports.getUserProfile = async (req, res) => {
     );
 
     // Get recent badges
-    const [badges] = await pool.query(
+    const [badges] = await executeQuery(
       `SELECT ub.earned_at, b.name, b.icon, b.rarity
        FROM user_badges ub
        JOIN badges b ON ub.badge_id = b.id
@@ -81,7 +81,7 @@ exports.getUserProfile = async (req, res) => {
     // Check if current user follows this user
     let isFollowing = false;
     if (req.user) {
-      const [followCheck] = await pool.query(
+      const [followCheck] = await executeQuery(
         'SELECT id FROM user_follows WHERE follower_id = ? AND following_id = ?',
         [req.user.id, req.params.userId]
       );
@@ -121,14 +121,14 @@ exports.toggleFollow = async (req, res) => {
     }
 
     // Check if already following
-    const [existing] = await pool.query(
+    const [existing] = await executeQuery(
       'SELECT id FROM user_follows WHERE follower_id = ? AND following_id = ?',
       [req.user.id, targetUserId]
     );
 
     if (existing.length > 0) {
       // Unfollow
-      await pool.query(
+      await executeQuery(
         'DELETE FROM user_follows WHERE follower_id = ? AND following_id = ?',
         [req.user.id, targetUserId]
       );
@@ -140,13 +140,13 @@ exports.toggleFollow = async (req, res) => {
       });
     } else {
       // Follow
-      await pool.query(
+      await executeQuery(
         'INSERT INTO user_follows (follower_id, following_id) VALUES (?, ?)',
         [req.user.id, targetUserId]
       );
 
       // Create notification
-      await pool.query(
+      await executeQuery(
         `INSERT INTO notifications (user_id, notification_type, title, message, link_url)
          VALUES (?, 'follow', 'New Follower', ?, ?)`,
         [targetUserId, `${req.user.username} started following you`, `/profile/${req.user.id}`]
@@ -172,7 +172,7 @@ exports.toggleFollow = async (req, res) => {
 // @access  Public
 exports.getComments = async (req, res) => {
   try {
-    const [comments] = await pool.query(
+    const [comments] = await executeQuery(
       `SELECT c.*, u.username, u.first_name, u.last_name, u.avatar_url, u.level,
               (SELECT COUNT(*) FROM comment_likes WHERE comment_id = c.id) as actual_likes_count
        FROM comments c
@@ -184,7 +184,7 @@ exports.getComments = async (req, res) => {
 
     // Get replies for each comment
     for (let comment of comments) {
-      const [replies] = await pool.query(
+      const [replies] = await executeQuery(
         `SELECT c.*, u.username, u.first_name, u.last_name, u.avatar_url, u.level
          FROM comments c
          JOIN users u ON c.user_id = u.id
@@ -223,19 +223,19 @@ exports.postComment = async (req, res) => {
       });
     }
 
-    const [result] = await pool.query(
+    const [result] = await executeQuery(
       'INSERT INTO comments (user_id, content_id, parent_comment_id, comment_text) VALUES (?, ?, ?, ?)',
       [req.user.id, req.params.contentId, parentCommentId || null, commentText.trim()]
     );
 
     // Award points for commenting
-    await pool.query(
+    await executeQuery(
       'UPDATE users SET total_points = total_points + 3 WHERE id = ?',
       [req.user.id]
     );
 
     // Create activity
-    await pool.query(
+    await executeQuery(
       `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
        VALUES (?, 'comment_posted', ?, 3)`,
       [req.user.id, JSON.stringify({ contentId: req.params.contentId, commentId: result.insertId })]
@@ -260,19 +260,19 @@ exports.postComment = async (req, res) => {
 // @access  Private
 exports.toggleCommentLike = async (req, res) => {
   try {
-    const [existing] = await pool.query(
+    const [existing] = await executeQuery(
       'SELECT id FROM comment_likes WHERE user_id = ? AND comment_id = ?',
       [req.user.id, req.params.commentId]
     );
 
     if (existing.length > 0) {
       // Unlike
-      await pool.query(
+      await executeQuery(
         'DELETE FROM comment_likes WHERE user_id = ? AND comment_id = ?',
         [req.user.id, req.params.commentId]
       );
 
-      await pool.query(
+      await executeQuery(
         'UPDATE comments SET likes_count = likes_count - 1 WHERE id = ?',
         [req.params.commentId]
       );
@@ -284,12 +284,12 @@ exports.toggleCommentLike = async (req, res) => {
       });
     } else {
       // Like
-      await pool.query(
+      await executeQuery(
         'INSERT INTO comment_likes (user_id, comment_id) VALUES (?, ?)',
         [req.user.id, req.params.commentId]
       );
 
-      await pool.query(
+      await executeQuery(
         'UPDATE comments SET likes_count = likes_count + 1 WHERE id = ?',
         [req.params.commentId]
       );
@@ -317,7 +317,7 @@ exports.getActivityFeed = async (req, res) => {
     const { limit = 20, offset = 0 } = req.query;
 
     // Get activities from followed users and self
-    const [activities] = await pool.query(
+    const [activities] = await executeQuery(
       `SELECT ua.*, u.username, u.first_name, u.last_name, u.avatar_url, u.level
        FROM user_activities ua
        JOIN users u ON ua.user_id = u.id
@@ -351,20 +351,20 @@ exports.getNotifications = async (req, res) => {
   try {
     const { limit = 20, unreadOnly = false } = req.query;
 
-    let query = 'SELECT * FROM notifications WHERE user_id = ?';
+    let sql = 'SELECT * FROM notifications WHERE user_id = ?';
     const params = [req.user.id];
 
     if (unreadOnly === 'true') {
-      query += ' AND is_read = false';
+      sql += ' AND is_read = false';
     }
 
-    query += ' ORDER BY created_at DESC LIMIT ?';
+    sql += ' ORDER BY created_at DESC LIMIT ?';
     params.push(parseInt(limit));
 
-    const [notifications] = await pool.query(query, params);
+    const [notifications] = await executeQuery(sql, params);
 
     // Get unread count
-    const [unreadCount] = await pool.query(
+    const [unreadCount] = await executeQuery(
       'SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = false',
       [req.user.id]
     );
@@ -389,7 +389,7 @@ exports.getNotifications = async (req, res) => {
 // @access  Private
 exports.markNotificationRead = async (req, res) => {
   try {
-    await pool.query(
+    await executeQuery(
       'UPDATE notifications SET is_read = true WHERE id = ? AND user_id = ?',
       [req.params.id, req.user.id]
     );
@@ -412,7 +412,7 @@ exports.markNotificationRead = async (req, res) => {
 // @access  Private
 exports.markAllNotificationsRead = async (req, res) => {
   try {
-    await pool.query(
+    await executeQuery(
       'UPDATE notifications SET is_read = true WHERE user_id = ? AND is_read = false',
       [req.user.id]
     );

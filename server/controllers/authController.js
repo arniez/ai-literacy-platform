@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { pool } = require('../config/db');
+const { query, insertAndGetId } = require('../config/db-universal');
 const generateToken = require('../utils/generateToken');
 
 // @desc    Register user
@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
     }
 
     // Check if user exists
-    const [existingUsers] = await pool.query(
+    const [existingUsers] = await query(
       'SELECT id FROM users WHERE email = ? OR username = ?',
       [email, username]
     );
@@ -35,29 +35,27 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create user
-    const [result] = await pool.query(
+    const userId = await insertAndGetId(
       `INSERT INTO users (username, email, password, first_name, last_name, study_program)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [username, email, hashedPassword, firstName || null, lastName || null, studyProgram || null]
     );
 
-    const userId = result.insertId;
-
     // Create welcome notification
-    await pool.query(
+    await insertAndGetId(
       `INSERT INTO notifications (user_id, notification_type, title, message, link_url)
        VALUES (?, 'system', 'Welcome to AI Literacy!', 'Start your journey by exploring learning materials', '/leermaterialen')`,
       [userId]
     );
 
     // Award "AI Pioneer" welcome badge
-    const [welcomeBadge] = await pool.query(
+    const [welcomeBadge] = await query(
       'SELECT id FROM badges WHERE name = ? LIMIT 1',
       ['AI Pioneer']
     );
 
     if (welcomeBadge.length > 0) {
-      await pool.query(
+      await insertAndGetId(
         'INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)',
         [userId, welcomeBadge[0].id]
       );
@@ -104,7 +102,7 @@ exports.login = async (req, res) => {
     }
 
     // Check for user
-    const [users] = await pool.query(
+    const [users] = await query(
       `SELECT id, username, email, password, first_name, last_name, role,
               avatar_url, total_points, level, is_active
        FROM users WHERE email = ?`,
@@ -138,7 +136,7 @@ exports.login = async (req, res) => {
     }
 
     // Update last login
-    await pool.query(
+    await query(
       'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?',
       [user.id]
     );
@@ -174,7 +172,7 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.getMe = async (req, res) => {
   try {
-    const [users] = await pool.query(
+    const [users] = await query(
       `SELECT id, username, email, first_name, last_name, role, study_program,
               avatar_url, bio, total_points, level, created_at, last_login
        FROM users WHERE id = ?`,
@@ -208,7 +206,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const { firstName, lastName, bio, studyProgram, avatarUrl } = req.body;
 
-    await pool.query(
+    await query(
       `UPDATE users SET
         first_name = COALESCE(?, first_name),
         last_name = COALESCE(?, last_name),
@@ -219,7 +217,7 @@ exports.updateProfile = async (req, res) => {
       [firstName, lastName, bio, studyProgram, avatarUrl, req.user.id]
     );
 
-    const [users] = await pool.query(
+    const [users] = await query(
       `SELECT id, username, email, first_name, last_name, role, study_program,
               avatar_url, bio, total_points, level
        FROM users WHERE id = ?`,

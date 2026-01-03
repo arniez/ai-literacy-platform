@@ -1,11 +1,11 @@
-const { pool } = require('../config/db');
+const { query, insertAndGetId } = require('../config/db-universal');
 
 // @desc    Get all badges
 // @route   GET /api/badges
 // @access  Public
 exports.getAllBadges = async (req, res) => {
   try {
-    const [badges] = await pool.query(
+    const [badges] = await query(
       'SELECT * FROM badges WHERE is_active = true ORDER BY rarity DESC, name ASC'
     );
 
@@ -30,7 +30,7 @@ exports.getUserBadges = async (req, res) => {
   try {
     const userId = req.params.userId || req.user?.id;
 
-    const [userBadges] = await pool.query(
+    const [userBadges] = await query(
       `SELECT ub.*, b.name, b.description, b.icon, b.badge_type, b.rarity, b.points_reward
        FROM user_badges ub
        JOIN badges b ON ub.badge_id = b.id
@@ -59,7 +59,7 @@ exports.getUserBadges = async (req, res) => {
 exports.getBadgeProgress = async (req, res) => {
   try {
     // Get all badges with user's progress towards earning them
-    const [badges] = await pool.query(
+    const [badges] = await query(
       `SELECT b.*,
               ub.id as user_badge_id,
               ub.earned_at,

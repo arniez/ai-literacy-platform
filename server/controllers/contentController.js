@@ -1,4 +1,4 @@
-const { pool } = require('../config/db');
+const { query: executeQuery, insertAndGetId } = require('../config/db-universal');
 
 // @desc    Get all content with filters
 // @route   GET /api/content
@@ -16,7 +16,7 @@ exports.getContent = async (req, res) => {
       offset = 0
     } = req.query;
 
-    let query = `
+    let sql = `
       SELECT c.*, m.title as module_title,
              (SELECT COUNT(*) FROM user_progress WHERE content_id = c.id AND status = 'completed') as completions
       FROM content c
@@ -26,44 +26,44 @@ exports.getContent = async (req, res) => {
     const params = [];
 
     if (type) {
-      query += ' AND c.content_type = ?';
+      sql += ' AND c.content_type = ?';
       params.push(type);
     }
 
     if (difficulty) {
-      query += ' AND c.difficulty = ?';
+      sql += ' AND c.difficulty = ?';
       params.push(difficulty);
     }
 
     if (moduleId) {
-      query += ' AND c.module_id = ?';
+      sql += ' AND c.module_id = ?';
       params.push(moduleId);
     }
 
     if (tag) {
-      query += ' AND JSON_CONTAINS(c.tags, ?)';
-      params.push(JSON.stringify(tag));
+      sql += ' AND c.tags @> ?';
+      params.push(JSON.stringify([tag]));
     }
 
     if (featured === 'true') {
-      query += ' AND c.is_featured = true';
+      sql += ' AND c.is_featured = true';
     }
 
     if (search) {
-      query += ' AND (c.title LIKE ? OR c.description LIKE ? OR c.tags LIKE ?)';
+      sql += ' AND (c.title LIKE ? OR c.description LIKE ? OR c.tags LIKE ?)';
       const searchTerm = `%${search}%`;
       params.push(searchTerm, searchTerm, searchTerm);
     }
 
-    query += ' ORDER BY c.is_featured DESC, c.created_at DESC LIMIT ? OFFSET ?';
+    sql += ' ORDER BY c.is_featured DESC, c.created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), parseInt(offset));
 
-    const [content] = await pool.query(query, params);
+    const [content] = await executeQuery(sql, params);
 
     // Add user progress if authenticated
     if (req.user) {
       for (let item of content) {
-        const [progress] = await pool.query(
+        const [progress] = await executeQuery(
           'SELECT status, progress_percentage, completed_at FROM user_progress WHERE user_id = ? AND content_id = ?',
           [req.user.id, item.id]
         );
@@ -88,8 +88,8 @@ exports.getContent = async (req, res) => {
       countParams.push(moduleId);
     }
     if (tag) {
-      countQuery += ' AND JSON_CONTAINS(c.tags, ?)';
-      countParams.push(JSON.stringify(tag));
+      countQuery += ' AND c.tags @> ?';
+      countParams.push(JSON.stringify([tag]));
     }
     if (featured === 'true') {
       countQuery += ' AND c.is_featured = true';
@@ -100,7 +100,7 @@ exports.getContent = async (req, res) => {
       countParams.push(searchTerm, searchTerm, searchTerm);
     }
 
-    const [countResult] = await pool.query(countQuery, countParams);
+    const [countResult] = await executeQuery(countQuery, countParams);
 
     res.status(200).json({
       success: true,
@@ -122,7 +122,7 @@ exports.getContent = async (req, res) => {
 // @access  Public
 exports.getContentById = async (req, res) => {
   try {
-    const [content] = await pool.query(
+    const [content] = await executeQuery(
       `SELECT c.*, m.title as module_title
        FROM content c
        LEFT JOIN modules m ON c.module_id = m.id
@@ -138,7 +138,7 @@ exports.getContentById = async (req, res) => {
     }
 
     // Increment view count
-    await pool.query(
+    await executeQuery(
       'UPDATE content SET view_count = view_count + 1 WHERE id = ?',
       [req.params.id]
     );
@@ -146,7 +146,7 @@ exports.getContentById = async (req, res) => {
     // Get user progress if authenticated
     let userProgress = null;
     if (req.user) {
-      const [progress] = await pool.query(
+      const [progress] = await executeQuery(
         'SELECT * FROM user_progress WHERE user_id = ? AND content_id = ?',
         [req.user.id, req.params.id]
       );
@@ -174,7 +174,7 @@ exports.getContentById = async (req, res) => {
 // @access  Public
 exports.getContentStats = async (req, res) => {
   try {
-    const [stats] = await pool.query(`
+    const [stats] = await executeQuery(`
       SELECT
         content_type,
         COUNT(*) as count,
@@ -212,7 +212,7 @@ exports.rateContent = async (req, res) => {
     }
 
     // Check if content exists
-    const [content] = await pool.query(
+    const [content] = await executeQuery(
       'SELECT id FROM content WHERE id = ?',
       [req.params.id]
     );
@@ -225,7 +225,7 @@ exports.rateContent = async (req, res) => {
     }
 
     // Insert or update rating
-    await pool.query(
+    await executeQuery(
       `INSERT INTO content_ratings (user_id, content_id, rating, review_text)
        VALUES (?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE rating = ?, review_text = ?, updated_at = CURRENT_TIMESTAMP`,
@@ -233,26 +233,26 @@ exports.rateContent = async (req, res) => {
     );
 
     // Update content average rating
-    const [ratingStats] = await pool.query(
+    const [ratingStats] = await executeQuery(
       `SELECT AVG(rating) as avg_rating, COUNT(*) as rating_count
        FROM content_ratings
        WHERE content_id = ?`,
       [req.params.id]
     );
 
-    await pool.query(
+    await executeQuery(
       'UPDATE content SET rating_avg = ?, rating_count = ? WHERE id = ?',
       [ratingStats[0].avg_rating, ratingStats[0].rating_count, req.params.id]
     );
 
     // Award points for rating
-    await pool.query(
+    await executeQuery(
       'UPDATE users SET total_points = total_points + 5 WHERE id = ?',
       [req.user.id]
     );
 
     // Create activity
-    await pool.query(
+    await executeQuery(
       `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
        VALUES (?, 'content_rated', ?, 5)`,
       [req.user.id, JSON.stringify({ contentId: req.params.id, rating })]

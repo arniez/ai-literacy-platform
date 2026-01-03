@@ -1,11 +1,11 @@
-const { pool } = require('../config/db');
+const { query, insertAndGetId } = require('../config/db-universal');
 
 // @desc    Get all active challenges
 // @route   GET /api/challenges
 // @access  Public
 exports.getChallenges = async (req, res) => {
   try {
-    const [challenges] = await pool.query(
+    const [challenges] = await query(
       `SELECT c.*, b.name as badge_name, b.icon as badge_icon
        FROM challenges c
        LEFT JOIN badges b ON c.badge_reward_id = b.id
@@ -33,7 +33,7 @@ exports.getChallenges = async (req, res) => {
 // @access  Private
 exports.getUserChallenges = async (req, res) => {
   try {
-    const [userChallenges] = await pool.query(
+    const [userChallenges] = await query(
       `SELECT uc.*, c.title, c.description, c.challenge_type, c.objective,
               c.target_value, c.points_reward, c.end_date,
               b.name as badge_reward_name, b.icon as badge_reward_icon
@@ -70,7 +70,7 @@ exports.getUserChallenges = async (req, res) => {
 exports.acceptChallenge = async (req, res) => {
   try {
     // Check if challenge exists and is active
-    const [challenges] = await pool.query(
+    const [challenges] = await query(
       `SELECT * FROM challenges
        WHERE id = ? AND is_active = true
          AND (end_date IS NULL OR end_date > CURRENT_TIMESTAMP)`,
@@ -85,7 +85,7 @@ exports.acceptChallenge = async (req, res) => {
     }
 
     // Check if user already accepted this challenge
-    const [existing] = await pool.query(
+    const [existing] = await query(
       'SELECT id FROM user_challenges WHERE user_id = ? AND challenge_id = ?',
       [req.user.id, req.params.id]
     );
@@ -98,7 +98,7 @@ exports.acceptChallenge = async (req, res) => {
     }
 
     // Accept challenge
-    await pool.query(
+    await query(
       'INSERT INTO user_challenges (user_id, challenge_id, status) VALUES (?, ?, ?)',
       [req.user.id, req.params.id, 'active']
     );

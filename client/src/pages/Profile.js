@@ -31,7 +31,7 @@ const Profile = () => {
   // Data states
   const [badges, setBadges] = useState([]);
   const [progress, setProgress] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites] = useState([]);
   const [stats, setStats] = useState(null);
 
   // Settings states

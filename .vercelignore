@@ -1,0 +1,12 @@
+# Ignore server directory and related files
+server/
+node_modules/
+*.md
+*.bat
+*.sh
+verify-setup.js
+.git/
+.claude/
+
+# Keep only client build essentials
+!client/

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaStar, FaEye, FaClock, FaBook, FaVideo, FaHeadphones, FaGamepad, FaBriefcase, FaPlay, FaCheck, FaExternalLinkAlt } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import ContentViewer from '../components/common/ContentViewer';
@@ -10,7 +9,6 @@ import './ContentView.css';
 const ContentView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userProgress, setUserProgress] = useState(null);
@@ -19,10 +17,6 @@ const ContentView = () => {
   const [reviewText, setReviewText] = useState('');
   const [submittingRating, setSubmittingRating] = useState(false);
   const [showViewer, setShowViewer] = useState(false);
-
-  useEffect(() => {
-    fetchContent();
-  }, [id]);
 
   const fetchContent = async () => {
     try {
@@ -38,6 +32,11 @@ const ContentView = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const getContentIcon = (type) => {
     const icons = {
@@ -173,7 +172,6 @@ const ContentView = () => {
   }
 
   const isCompleted = userProgress?.status === 'completed';
-  const isInProgress = userProgress?.status === 'in_progress';
 
   return (
     <div className="content-view-page">

@@ -64,7 +64,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const [suggestedRes, progressRes, statsRes, leaderboardRes, notificationsRes] = await Promise.all([
+      const [suggestedRes, , statsRes, leaderboardRes, notificationsRes] = await Promise.all([
         api.get('/content?limit=6&featured=true'),
         api.get('/progress'),
         api.get('/progress/stats'),

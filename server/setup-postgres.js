@@ -9,43 +9,20 @@ const path = require('path');
 require('dotenv').config({ path: './config/config.env' });
 
 async function setupDatabase() {
-  // First, connect to postgres database to create our database
-  const setupClient = new Client({
+  // Connect directly to the database (for Neon, database already exists)
+  const dbClient = new Client({
     host: process.env.PG_HOST || 'localhost',
     user: process.env.PG_USER || 'postgres',
     password: process.env.PG_PASSWORD,
-    database: 'postgres', // Connect to default postgres database
+    database: process.env.PG_NAME || 'ai_literacy_db',
     port: process.env.PG_PORT || 5432,
+    ssl: process.env.PG_HOST && process.env.PG_HOST.includes('neon.tech') ? { rejectUnauthorized: false } : false,
+    connectionTimeoutMillis: 10000,
   });
 
   try {
-    await setupClient.connect();
-    console.log('✓ Connected to PostgreSQL server');
-
-    // Check if database exists
-    const dbCheckResult = await setupClient.query(
-      `SELECT 1 FROM pg_database WHERE datname = $1`,
-      [process.env.PG_NAME || 'ai_literacy_db']
-    );
-
-    if (dbCheckResult.rows.length === 0) {
-      // Create database
-      await setupClient.query(`CREATE DATABASE ${process.env.PG_NAME || 'ai_literacy_db'}`);
-      console.log(`✓ Created database: ${process.env.PG_NAME || 'ai_literacy_db'}`);
-    } else {
-      console.log(`✓ Database already exists: ${process.env.PG_NAME || 'ai_literacy_db'}`);
-    }
-
-    await setupClient.end();
-
-    // Now connect to our new database and run schema
-    const dbClient = new Client({
-      host: process.env.PG_HOST || 'localhost',
-      user: process.env.PG_USER || 'postgres',
-      password: process.env.PG_PASSWORD,
-      database: process.env.PG_NAME || 'ai_literacy_db',
-      port: process.env.PG_PORT || 5432,
-    });
+    console.log('Connecting to database:', process.env.PG_NAME || 'ai_literacy_db');
+    console.log('Host:', process.env.PG_HOST);
 
     await dbClient.connect();
     console.log(`✓ Connected to database: ${process.env.PG_NAME || 'ai_literacy_db'}`);
@@ -58,6 +35,17 @@ async function setupDatabase() {
     await dbClient.query(schema);
     console.log('✓ Schema created successfully!');
 
+    // Verify tables were created
+    const tables = await dbClient.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      ORDER BY table_name
+    `);
+
+    console.log(`✓ Created ${tables.rows.length} tables:`);
+    tables.rows.forEach(row => console.log(`  - ${row.table_name}`));
+
     await dbClient.end();
 
     console.log('\n╔════════════════════════════════════════════════════╗');
@@ -65,12 +53,9 @@ async function setupDatabase() {
     console.log('║   PostgreSQL Database Setup Complete! ✓           ║');
     console.log('║                                                    ║');
     console.log('║   Next steps:                                      ║');
-    console.log('║   1. Run: node export-mysql-data.js               ║');
-    console.log('║      (to export your MySQL data)                   ║');
-    console.log('║   2. Run: node import-to-postgres.js              ║');
-    console.log('║      (to import data into PostgreSQL)              ║');
-    console.log('║   3. Update config.env: DB_TYPE=postgres           ║');
-    console.log('║   4. Start server: npm start                       ║');
+    console.log('║   1. Run: npm run seed                             ║');
+    console.log('║      (to populate database with initial data)      ║');
+    console.log('║   2. Start server: npm start                       ║');
     console.log('║                                                    ║');
     console.log('╚════════════════════════════════════════════════════╝\n');
 

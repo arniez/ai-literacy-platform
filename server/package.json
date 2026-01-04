@@ -25,4 +25,10 @@
   "devDependencies": {
     "nodemon": "^3.0.2"
   }
+ 
+  {
+  "scripts": {
+    "build": "cd client && npm install && npm run build"
+  }
+  }
 }

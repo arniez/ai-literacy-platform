@@ -7,9 +7,10 @@ const pool = new Pool({
   password: process.env.PG_PASSWORD,
   database: process.env.PG_NAME || 'ai_literacy_db',
   port: process.env.PG_PORT || 5432,
+  ssl: process.env.PG_HOST && process.env.PG_HOST.includes('neon.tech') ? { rejectUnauthorized: false } : false,
   max: 10, // maximum number of clients in the pool
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000,
 });
 
 // Test connection

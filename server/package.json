@@ -6,8 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "setup": "node setup-and-seed.js",
+    "setup:schema": "node setup-postgres.js",
     "seed": "node seed-database.js",
-    "seed:export": "node export-seed-data.js"
+    "seed:export": "node export-seed-data.js",
+    "test:connection": "node test-neon-connection.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -1,0 +1,10 @@
+# Railway should only deploy the server, not the client
+client/
+.git/
+.claude/
+*.md
+*.sh
+*.bat
+node_modules/
+.env
+.DS_Store

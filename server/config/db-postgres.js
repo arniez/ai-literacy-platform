@@ -1,6 +1,14 @@
 const { Pool } = require('pg');
 require('dotenv').config({ path: './config/config.env' });
 
+console.log('PostgreSQL Configuration:', {
+  host: process.env.PG_HOST || 'localhost',
+  user: process.env.PG_USER || 'postgres',
+  database: process.env.PG_NAME || 'ai_literacy_db',
+  port: process.env.PG_PORT || 5432,
+  ssl: process.env.PG_SSL === 'true'
+});
+
 const pool = new Pool({
   host: process.env.PG_HOST || 'localhost',
   user: process.env.PG_USER || 'postgres',
@@ -22,7 +30,7 @@ const testConnection = async () => {
     console.log('PostgreSQL Database Connected Successfully');
     client.release();
   } catch (error) {
-    console.error('Database Connection Error:', error.message);
+    console.error('Database Connection Error:', error);
     process.exit(1);
   }
 };

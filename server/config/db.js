@@ -19,7 +19,7 @@ const testConnection = async () => {
     console.log('MySQL Database Connected Successfully');
     connection.release();
   } catch (error) {
-    console.error('Database Connection Error:', error.message);
+    console.error('Database Connection Error:', error);
     process.exit(1);
   }
 };

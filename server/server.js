@@ -12,6 +12,10 @@ dotenv.config({ path: './config/config.env' });
 // Initialize app
 const app = express();
 
+// Trust proxy - required when behind reverse proxy (Vercel, Nginx, etc.)
+// This allows express-rate-limit to correctly identify client IPs
+app.set('trust proxy', 1);
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

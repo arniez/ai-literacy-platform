@@ -1,5 +1,12 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: './config/config.env' });
+const path = require('path');
+const fs = require('fs');
+
+// Only load from config.env if it exists (for local development)
+const configPath = path.join(__dirname, 'config.env');
+if (fs.existsSync(configPath)) {
+  require('dotenv').config({ path: configPath });
+}
 
 console.log('PostgreSQL Configuration:', {
   host: process.env.PG_HOST || 'localhost',

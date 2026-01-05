@@ -1,5 +1,12 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config({ path: './config/config.env' });
+const path = require('path');
+const fs = require('fs');
+
+// Only load from config.env if it exists (for local development)
+const configPath = path.join(__dirname, 'config.env');
+if (fs.existsSync(configPath)) {
+  require('dotenv').config({ path: configPath });
+}
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,

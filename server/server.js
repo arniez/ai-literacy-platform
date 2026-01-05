@@ -4,11 +4,15 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
 const { testConnection, dbType } = require('./config/db-universal');
 const errorHandler = require('./middleware/errorHandler');
 
-// Load env vars
-dotenv.config({ path: './config/config.env' });
+// Load env vars (only from file if it exists, otherwise use Railway environment variables)
+const configPath = path.join(__dirname, 'config', 'config.env');
+if (fs.existsSync(configPath)) {
+  dotenv.config({ path: configPath });
+}
 
 // Initialize app
 const app = express();

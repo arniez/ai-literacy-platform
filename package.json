@@ -10,7 +10,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "start": "npm run build && cd server && npm start"
   },
   "keywords": ["ai", "education", "learning", "gamification"],
   "author": "",

@@ -1,0 +1,416 @@
+/* Badge Component Styles */
+
+.badge-component {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.badge-component:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.badge-inner {
+  position: relative;
+  padding: var(--spacing-lg);
+  background: var(--surface-color);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  z-index: 1;
+}
+
+/* Size Variants */
+.badge-small .badge-inner {
+  padding: var(--spacing-sm);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.badge-medium .badge-inner {
+  padding: var(--spacing-md);
+}
+
+.badge-large .badge-inner {
+  padding: var(--spacing-xl);
+}
+
+/* Badge Icon */
+.badge-icon-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.badge-small .badge-icon-container {
+  width: 48px;
+  height: 48px;
+}
+
+.badge-medium .badge-icon-container {
+  width: 64px;
+  height: 64px;
+}
+
+.badge-large .badge-icon-container {
+  width: 96px;
+  height: 96px;
+}
+
+.badge-icon-img,
+.badge-icon-default {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+}
+
+.badge-small .badge-icon-default {
+  font-size: 1.5rem;
+}
+
+.badge-large .badge-icon-default {
+  font-size: 3rem;
+}
+
+/* Lock Overlay */
+.badge-lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.lock-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Badge Info */
+.badge-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.badge-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.badge-small .badge-name {
+  font-size: 0.9rem;
+}
+
+.badge-large .badge-name {
+  font-size: 1.4rem;
+}
+
+.badge-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.badge-small .badge-description {
+  font-size: 0.8rem;
+}
+
+.badge-large .badge-description {
+  font-size: 1rem;
+}
+
+/* Rarity Label */
+.badge-rarity-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.rarity-text {
+  font-weight: 600;
+}
+
+/* Points */
+.badge-points {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--primary-color);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+/* Progress Bar */
+.badge-progress {
+  margin-top: var(--spacing-sm);
+}
+
+.badge-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--border-color);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.badge-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  transition: width 0.3s ease;
+  border-radius: var(--radius-full);
+}
+
+.badge-progress-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Earned Date */
+.badge-earned-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: var(--spacing-xs);
+}
+
+/* Rarity Styles */
+
+/* Common - Gray */
+.badge-common .badge-inner {
+  border-color: #9E9E9E;
+  box-shadow: 0 4px 12px rgba(158, 158, 158, 0.15);
+}
+
+.badge-common .badge-rarity-label {
+  background-color: rgba(158, 158, 158, 0.15);
+  color: #616161;
+}
+
+.badge-common:hover .badge-inner {
+  box-shadow: 0 8px 24px var(--badge-glow);
+  border-color: #757575;
+}
+
+/* Uncommon - Green */
+.badge-uncommon .badge-inner {
+  border-color: #4CAF50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.badge-uncommon .badge-rarity-label {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #2E7D32;
+}
+
+.badge-uncommon:hover .badge-inner {
+  box-shadow: 0 8px 24px var(--badge-glow);
+  border-color: #66BB6A;
+}
+
+/* Rare - Blue */
+.badge-rare .badge-inner {
+  border-color: #2196F3;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.25);
+}
+
+.badge-rare .badge-rarity-label {
+  background-color: rgba(33, 150, 243, 0.15);
+  color: #1565C0;
+}
+
+.badge-rare:hover .badge-inner {
+  box-shadow: 0 8px 24px var(--badge-glow);
+  border-color: #42A5F5;
+}
+
+/* Epic - Purple */
+.badge-epic .badge-inner {
+  border-color: #9C27B0;
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+}
+
+.badge-epic .badge-rarity-label {
+  background-color: rgba(156, 39, 176, 0.15);
+  color: #6A1B9A;
+}
+
+.badge-epic:hover .badge-inner {
+  box-shadow: 0 8px 24px var(--badge-glow);
+  border-color: #AB47BC;
+}
+
+/* Legendary - Gold */
+.badge-legendary .badge-inner {
+  border-color: #FFC107;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.05) 0%, rgba(255, 152, 0, 0.05) 100%);
+}
+
+.badge-legendary .badge-rarity-label {
+  background: linear-gradient(135deg, #FFC107, #FF9800);
+  color: white;
+}
+
+.badge-legendary:hover .badge-inner {
+  box-shadow: 0 8px 24px var(--badge-glow), 0 0 40px rgba(255, 193, 7, 0.2);
+  border-color: #FFD54F;
+}
+
+/* Locked State */
+.badge-locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.badge-locked:hover {
+  transform: none;
+}
+
+.badge-locked .badge-inner {
+  background: var(--background-color);
+  border-color: var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.badge-locked .badge-name,
+.badge-locked .badge-description {
+  color: var(--text-secondary);
+}
+
+/* Shine Effect */
+.badge-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: badge-shine 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes badge-shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  50%, 100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Legendary badges get extra animations */
+.badge-legendary .badge-shine {
+  animation: badge-shine 2s infinite, legendary-pulse 2s infinite alternate;
+}
+
+@keyframes legendary-pulse {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Badge Grid Display */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.badges-grid.compact {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .badges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .badge-medium .badge-inner {
+    padding: var(--spacing-sm);
+  }
+
+  .badge-name {
+    font-size: 1rem;
+  }
+
+  .badge-description {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge-component {
+    font-size: 0.9rem;
+  }
+
+  .badge-icon-container {
+    width: 56px !important;
+    height: 56px !important;
+  }
+}
+
+/* Badge Showcase Animation */
+.badge-component.newly-earned {
+  animation: badge-pop-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badge-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}

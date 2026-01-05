@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import ContentViewer from '../components/common/ContentViewer';
+import ContentQuizModal from '../components/ContentQuizModal';
 import './ContentView.css';
 
 const ContentView = () => {
@@ -19,6 +20,8 @@ const ContentView = () => {
   const [reviewText, setReviewText] = useState('');
   const [submittingRating, setSubmittingRating] = useState(false);
   const [showViewer, setShowViewer] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [hasQuiz, setHasQuiz] = useState(false);
 
   useEffect(() => {
     fetchContent();
@@ -30,6 +33,14 @@ const ContentView = () => {
       const response = await api.get(`/content/${id}`);
       setContent(response.data.data);
       setUserProgress(response.data.data.userProgress);
+
+      // Check if content has quiz (basis tag)
+      const tags = response.data.data.tags;
+      const isBasis = tags && (
+        (typeof tags === 'string' && tags.includes('basis')) ||
+        (Array.isArray(tags) && tags.includes('basis'))
+      );
+      setHasQuiz(isBasis);
     } catch (error) {
       console.error('Error fetching content:', error);
       toast.error('Fout bij het laden van content');
@@ -81,6 +92,12 @@ const ContentView = () => {
   };
 
   const handleCompleteContent = async () => {
+    // If has quiz and not completed yet, show quiz instead
+    if (hasQuiz && userProgress?.status !== 'completed') {
+      setShowQuiz(true);
+      return;
+    }
+
     try {
       const response = await api.post(`/progress/${id}`, {
         status: 'completed',
@@ -93,6 +110,10 @@ const ContentView = () => {
       console.error('Error completing content:', error);
       toast.error('Fout bij het voltooien van content');
     }
+  };
+
+  const handleQuizComplete = () => {
+    fetchContent(); // Refresh to show completed status
   };
 
   const handleRatingSubmit = async () => {
@@ -182,6 +203,17 @@ const ContentView = () => {
         <ContentViewer
           content={content}
           onClose={() => setShowViewer(false)}
+        />
+      )}
+
+      {/* Content Quiz Modal */}
+      {showQuiz && hasQuiz && (
+        <ContentQuizModal
+          contentId={id}
+          contentTitle={content.title}
+          isOpen={showQuiz}
+          onClose={() => setShowQuiz(false)}
+          onComplete={handleQuizComplete}
         />
       )}
 
@@ -334,7 +366,7 @@ const ContentView = () => {
                         className="btn btn-success btn-block"
                         onClick={handleCompleteContent}
                       >
-                        <FaCheck /> Markeer als Voltooid
+                        <FaCheck /> {hasQuiz ? 'Maak Quiz' : 'Markeer als Voltooid'}
                       </button>
                     )}
 

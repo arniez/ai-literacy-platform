@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FaTimes, FaExpand, FaCompress, FaExternalLinkAlt } from 'react-icons/fa';
+import useDraggable from '../../hooks/useDraggable';
 import './ContentViewer.css';
 
 const ContentViewer = ({ content, onClose }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { position, isDragging, handleMouseDown } = useDraggable(isExpanded);
 
   if (!content) return null;
 
@@ -108,9 +110,18 @@ const ContentViewer = ({ content, onClose }) => {
       />
 
       {/* Content Viewer */}
-      <div className={`content-viewer ${isExpanded ? 'expanded' : ''}`}>
+      <div
+        className={`content-viewer ${isExpanded ? 'expanded' : ''} ${isDragging ? 'dragging' : ''}`}
+        style={!isExpanded ? {
+          transform: `translateX(calc(-50% + ${position.x}px)) translateY(${position.y}px)`
+        } : {}}
+      >
         {/* Header */}
-        <div className="content-viewer-header">
+        <div
+          className="content-viewer-header"
+          onMouseDown={handleMouseDown}
+          style={{ cursor: isExpanded ? 'default' : 'move' }}
+        >
           <div className="content-viewer-title">
             <h3>{content.title}</h3>
             <span className="content-type-label">{content.content_type}</span>

@@ -41,7 +41,20 @@
       "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzY3NDY1NTYwLCJleHAiOjE3NzAwNTc1NjB9.EMLy_4G18NC51YoIPNLg7v-wAS6niDTB2EIz9cLX07k\")",
       "Bash(net stop MySQL80)",
       "Bash(sc query:*)",
-      "Bash(net stop:*)"
+      "Bash(net stop:*)",
+      "Bash(git push:*)",
+      "Bash(start \"AI Literacy Frontend\" cmd /k \"npm start\")",
+      "Bash(timeout /t 12 /nobreak)",
+      "Bash(echo:*)",
+      "Bash(powershell.exe -Command \"Get-Process node | Stop-Process -Force\")",
+      "Bash(timeout /t 15 /nobreak)",
+      "Bash(powershell -Command:*)",
+      "Bash(robocopy:*)",
+      "Bash(\"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\pg_dump.exe\" -U postgres -d ai_literacy_db -f \"backups\\\\backup_20260105_172054\\\\database_schema.sql\" --schema-only --no-password)",
+      "Bash(set:*)",
+      "Bash(\"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\pg_dump.exe\" -U postgres -d ai_literacy_db -f \"backups\\\\backup_20260105_172054\\\\database_schema.sql\" --schema-only)",
+      "Bash(export_db.bat)",
+      "Bash(cmd.exe /C \"backups\\\\backup_20260105_172054\\\\export_db.bat\")"
     ]
   }
 }

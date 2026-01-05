@@ -24,24 +24,25 @@ exports.getContent = async (req, res) => {
       WHERE c.is_published = true
     `;
     const params = [];
+    let paramCount = 1;
 
     if (type) {
-      sql += ' AND c.content_type = ?';
+      sql += ` AND c.content_type = $${paramCount++}`;
       params.push(type);
     }
 
     if (difficulty) {
-      sql += ' AND c.difficulty = ?';
+      sql += ` AND c.difficulty = $${paramCount++}`;
       params.push(difficulty);
     }
 
     if (moduleId) {
-      sql += ' AND c.module_id = ?';
+      sql += ` AND c.module_id = $${paramCount++}`;
       params.push(moduleId);
     }
 
     if (tag) {
-      sql += ' AND c.tags @> ?';
+      sql += ` AND c.tags @> $${paramCount++}`;
       params.push(JSON.stringify([tag]));
     }
 
@@ -50,12 +51,13 @@ exports.getContent = async (req, res) => {
     }
 
     if (search) {
-      sql += ' AND (c.title LIKE ? OR c.description LIKE ? OR c.tags LIKE ?)';
+      sql += ` AND (c.title ILIKE $${paramCount} OR c.description ILIKE $${paramCount + 1} OR c.tags::text ILIKE $${paramCount + 2})`;
       const searchTerm = `%${search}%`;
       params.push(searchTerm, searchTerm, searchTerm);
+      paramCount += 3;
     }
 
-    sql += ' ORDER BY c.is_featured DESC, c.created_at DESC LIMIT ? OFFSET ?';
+    sql += ` ORDER BY c.is_featured DESC, c.created_at DESC LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
     params.push(parseInt(limit), parseInt(offset));
 
     const [content] = await executeQuery(sql, params);
@@ -64,7 +66,7 @@ exports.getContent = async (req, res) => {
     if (req.user) {
       for (let item of content) {
         const [progress] = await executeQuery(
-          'SELECT status, progress_percentage, completed_at FROM user_progress WHERE user_id = ? AND content_id = ?',
+          'SELECT status, progress_percentage, completed_at FROM user_progress WHERE user_id = $1 AND content_id = $2',
           [req.user.id, item.id]
         );
         item.userProgress = progress[0] || null;
@@ -74,30 +76,32 @@ exports.getContent = async (req, res) => {
     // Get total count
     let countQuery = 'SELECT COUNT(*) as total FROM content c WHERE c.is_published = true';
     const countParams = [];
+    let countParamCount = 1;
 
     if (type) {
-      countQuery += ' AND c.content_type = ?';
+      countQuery += ` AND c.content_type = $${countParamCount++}`;
       countParams.push(type);
     }
     if (difficulty) {
-      countQuery += ' AND c.difficulty = ?';
+      countQuery += ` AND c.difficulty = $${countParamCount++}`;
       countParams.push(difficulty);
     }
     if (moduleId) {
-      countQuery += ' AND c.module_id = ?';
+      countQuery += ` AND c.module_id = $${countParamCount++}`;
       countParams.push(moduleId);
     }
     if (tag) {
-      countQuery += ' AND c.tags @> ?';
+      countQuery += ` AND c.tags @> $${countParamCount++}`;
       countParams.push(JSON.stringify([tag]));
     }
     if (featured === 'true') {
       countQuery += ' AND c.is_featured = true';
     }
     if (search) {
-      countQuery += ' AND (c.title LIKE ? OR c.description LIKE ? OR c.tags LIKE ?)';
+      countQuery += ` AND (c.title ILIKE $${countParamCount} OR c.description ILIKE $${countParamCount + 1} OR c.tags::text ILIKE $${countParamCount + 2})`;
       const searchTerm = `%${search}%`;
       countParams.push(searchTerm, searchTerm, searchTerm);
+      countParamCount += 3;
     }
 
     const [countResult] = await executeQuery(countQuery, countParams);
@@ -126,7 +130,7 @@ exports.getContentById = async (req, res) => {
       `SELECT c.*, m.title as module_title
        FROM content c
        LEFT JOIN modules m ON c.module_id = m.id
-       WHERE c.id = ? AND c.is_published = true`,
+       WHERE c.id = $1 AND c.is_published = true`,
       [req.params.id]
     );
 
@@ -139,7 +143,7 @@ exports.getContentById = async (req, res) => {
 
     // Increment view count
     await executeQuery(
-      'UPDATE content SET view_count = view_count + 1 WHERE id = ?',
+      'UPDATE content SET view_count = view_count + 1 WHERE id = $1',
       [req.params.id]
     );
 
@@ -147,7 +151,7 @@ exports.getContentById = async (req, res) => {
     let userProgress = null;
     if (req.user) {
       const [progress] = await executeQuery(
-        'SELECT * FROM user_progress WHERE user_id = ? AND content_id = ?',
+        'SELECT * FROM user_progress WHERE user_id = $1 AND content_id = $2',
         [req.user.id, req.params.id]
       );
       userProgress = progress[0] || null;
@@ -213,7 +217,7 @@ exports.rateContent = async (req, res) => {
 
     // Check if content exists
     const [content] = await executeQuery(
-      'SELECT id FROM content WHERE id = ?',
+      'SELECT id FROM content WHERE id = $1',
       [req.params.id]
     );
 
@@ -224,37 +228,38 @@ exports.rateContent = async (req, res) => {
       });
     }
 
-    // Insert or update rating
+    // Insert or update rating (PostgreSQL upsert)
     await executeQuery(
       `INSERT INTO content_ratings (user_id, content_id, rating, review_text)
-       VALUES (?, ?, ?, ?)
-       ON DUPLICATE KEY UPDATE rating = ?, review_text = ?, updated_at = CURRENT_TIMESTAMP`,
-      [req.user.id, req.params.id, rating, reviewText || null, rating, reviewText || null]
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (user_id, content_id)
+       DO UPDATE SET rating = $3, review_text = $4, updated_at = CURRENT_TIMESTAMP`,
+      [req.user.id, req.params.id, rating, reviewText || null]
     );
 
     // Update content average rating
     const [ratingStats] = await executeQuery(
       `SELECT AVG(rating) as avg_rating, COUNT(*) as rating_count
        FROM content_ratings
-       WHERE content_id = ?`,
+       WHERE content_id = $1`,
       [req.params.id]
     );
 
     await executeQuery(
-      'UPDATE content SET rating_avg = ?, rating_count = ? WHERE id = ?',
+      'UPDATE content SET rating_avg = $1, rating_count = $2 WHERE id = $3',
       [ratingStats[0].avg_rating, ratingStats[0].rating_count, req.params.id]
     );
 
     // Award points for rating
     await executeQuery(
-      'UPDATE users SET total_points = total_points + 5 WHERE id = ?',
+      'UPDATE users SET total_points = total_points + 5 WHERE id = $1',
       [req.user.id]
     );
 
     // Create activity
     await executeQuery(
       `INSERT INTO user_activities (user_id, activity_type, activity_data, points_earned)
-       VALUES (?, 'content_rated', ?, 5)`,
+       VALUES ($1, 'content_rated', $2, 5)`,
       [req.user.id, JSON.stringify({ contentId: req.params.id, rating })]
     );
 
@@ -268,6 +273,194 @@ exports.rateContent = async (req, res) => {
     });
   } catch (error) {
     console.error('Rate content error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
+// @desc    Create new content (admin only)
+// @route   POST /api/content
+// @access  Private/Admin
+exports.createContent = async (req, res) => {
+  try {
+    const {
+      module_id,
+      title,
+      description,
+      content_type,
+      url,
+      thumbnail_url,
+      duration,
+      difficulty,
+      points_reward,
+      tags,
+      source,
+      is_featured,
+      is_published
+    } = req.body;
+
+    // Validate required fields
+    if (!module_id || !title || !description || !content_type || !url || !difficulty) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields'
+      });
+    }
+
+    const sql = `
+      INSERT INTO content (
+        module_id, title, description, content_type, url, thumbnail_url,
+        duration, difficulty, points_reward, tags, source, is_featured, is_published
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    `;
+
+    const id = await insertAndGetId(sql, [
+      module_id,
+      title,
+      description,
+      content_type,
+      url,
+      thumbnail_url || null,
+      duration || 0,
+      difficulty,
+      points_reward || 0,
+      JSON.stringify(tags || []),
+      source || 'internal',
+      is_featured || false,
+      is_published !== false
+    ]);
+
+    res.status(201).json({
+      success: true,
+      message: 'Content created successfully',
+      data: { id }
+    });
+  } catch (error) {
+    console.error('Create content error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
+// @desc    Update content (admin only)
+// @route   PUT /api/content/:id
+// @access  Private/Admin
+exports.updateContent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      module_id,
+      title,
+      description,
+      content_type,
+      url,
+      thumbnail_url,
+      duration,
+      difficulty,
+      points_reward,
+      tags,
+      source,
+      is_featured,
+      is_published
+    } = req.body;
+
+    const sql = `
+      UPDATE content SET
+        module_id = $1,
+        title = $2,
+        description = $3,
+        content_type = $4,
+        url = $5,
+        thumbnail_url = $6,
+        duration = $7,
+        difficulty = $8,
+        points_reward = $9,
+        tags = $10,
+        source = $11,
+        is_featured = $12,
+        is_published = $13,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = $14
+    `;
+
+    await executeQuery(sql, [
+      module_id,
+      title,
+      description,
+      content_type,
+      url,
+      thumbnail_url || null,
+      duration || 0,
+      difficulty,
+      points_reward || 0,
+      JSON.stringify(tags || []),
+      source || 'internal',
+      is_featured || false,
+      is_published !== false,
+      id
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Content updated successfully'
+    });
+  } catch (error) {
+    console.error('Update content error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
+// @desc    Delete content (admin only)
+// @route   DELETE /api/content/:id
+// @access  Private/Admin
+exports.deleteContent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Delete related records first (due to foreign keys)
+    await executeQuery('DELETE FROM user_progress WHERE content_id = $1', [id]);
+    await executeQuery('DELETE FROM comments WHERE content_id = $1', [id]);
+    await executeQuery('DELETE FROM content_ratings WHERE content_id = $1', [id]);
+
+    // Delete the content
+    await executeQuery('DELETE FROM content WHERE id = $1', [id]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Content deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete content error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
+// @desc    Get all modules
+// @route   GET /api/content/modules
+// @access  Public
+exports.getModules = async (req, res) => {
+  try {
+    const [modules] = await executeQuery(
+      'SELECT * FROM modules ORDER BY order_index ASC'
+    );
+
+    res.status(200).json({
+      success: true,
+      count: modules.length,
+      data: modules
+    });
+  } catch (error) {
+    console.error('Get modules error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error'

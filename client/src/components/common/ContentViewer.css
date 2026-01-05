@@ -40,6 +40,13 @@
   display: flex;
   flex-direction: column;
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.content-viewer.dragging {
+  box-shadow: 0 8px 60px rgba(0, 0, 0, 0.5);
+  cursor: move !important;
 }
 
 @keyframes slideUp {
@@ -74,6 +81,21 @@
   border-bottom: 1px solid var(--border-color);
   background: var(--surface-color);
   flex-shrink: 0;
+  position: relative;
+}
+
+.content-viewer-header::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .content-viewer.expanded .content-viewer-header {

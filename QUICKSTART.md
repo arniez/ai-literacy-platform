@@ -5,7 +5,7 @@ Get up and running in 5 minutes!
 ## Prerequisites
 
 ✅ **Node.js** (v14 or higher) - [Download](https://nodejs.org/)
-✅ **MySQL** (v5.7 or higher) - [Download](https://dev.mysql.com/downloads/)
+✅ **PostgreSQL** (v12 or higher) - [Download](https://www.postgresql.org/download/)
 ✅ **Git** (optional)
 
 ## Installation (5 Steps)
@@ -22,32 +22,45 @@ cd ../client
 npm install
 ```
 
-### Step 2: Setup MySQL Database
+### Step 2: Setup PostgreSQL Database
 
-**Option A: Using MySQL Command Line**
+**Option A: Using PostgreSQL Command Line**
 ```bash
-mysql -u root -p < server/config/database.sql
+psql -U postgres -d ai_literacy_db -f server/config/database-postgres.sql
 ```
 
-**Option B: Using MySQL Workbench/phpMyAdmin**
-1. Open `server/config/database.sql`
-2. Copy and execute the SQL in your MySQL client
+**Option B: Using pgAdmin**
+1. Create database: `ai_literacy_db`
+2. Open `server/config/database-postgres.sql`
+3. Execute the SQL in pgAdmin query tool
 
 ### Step 3: Configure Environment
 
-Edit `server/config/config.env`:
+Create `server/.env` file:
 
 ```env
-# REQUIRED: Change these values!
-DB_PASSWORD=your_mysql_password
+# Database Configuration
+DB_TYPE=postgres
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASSWORD=your_postgresql_password
+DB_NAME=ai_literacy_db
+DB_PORT=5432
+
+# Server Configuration
+PORT=5002
+NODE_ENV=development
+
+# JWT Configuration
 JWT_SECRET=change_this_to_a_random_secret_key_at_least_32_chars
+JWT_EXPIRE=30d
 ```
 
 ### Step 4: Seed Demo Data
 
 ```bash
 cd server
-node scripts/seedData.js
+node seed-database.js
 ```
 
 Expected output:
@@ -64,7 +77,7 @@ Demo Users:
 **Terminal 1 - Backend:**
 ```bash
 cd server
-npm run dev
+npm start
 ```
 
 **Terminal 2 - Frontend:**
@@ -87,11 +100,13 @@ npm start
 
 ### ✅ Backend (Complete)
 - ✅ RESTful API with Express.js
-- ✅ MySQL database with full schema
+- ✅ PostgreSQL database with full schema
 - ✅ JWT authentication & authorization
 - ✅ User management
-- ✅ Content management
+- ✅ Content management (PostgreSQL optimized)
 - ✅ Progress tracking
+- ✅ Quiz system (BASIS content + general quizzes)
+- ✅ Content quiz integration
 - ✅ Badges & achievements system
 - ✅ Challenges (daily/weekly/monthly)
 - ✅ Social features (comments, likes, follows)
@@ -100,80 +115,69 @@ npm start
 - ✅ Activity feed
 - ✅ Demo data seeding
 
-### ✅ Frontend (Core Features)
+### ✅ Frontend (Implemented Features)
 - ✅ React 18 with React Router
 - ✅ Authentication (Login/Register)
 - ✅ Protected routes
 - ✅ Responsive navigation
-- ✅ Home page
+- ✅ Home page with hero section
 - ✅ User context & state management
 - ✅ Toast notifications
 - ✅ Beautiful UI with CSS variables
-- ⏳ Dashboard (stub - to be implemented)
-- ⏳ Learning Materials (stub - to be implemented)
-- ⏳ Badges page (stub - to be implemented)
-- ⏳ Leaderboard (stub - to be implemented)
-- ⏳ Profile (stub - to be implemented)
+- ✅ Dashboard with statistics
+- ✅ Learning Materials page (Leermaterialen)
+  - ✅ Content filtering by type (BASIS, E-LEARNING, PODCASTS, VIDEOS, GAMES, PRAKTIJKVOORBEELDEN)
+  - ✅ Search functionality
+  - ✅ Difficulty filters
+  - ✅ Module filters
+  - ✅ Featured content
+  - ✅ Tag-based filtering (JSONB support)
+- ✅ Content Viewer
+  - ✅ Draggable window interface
+  - ✅ Video/iframe embedding
+  - ✅ YouTube, Vimeo, Spotify support
+  - ✅ Fullscreen mode
+  - ✅ External link support
+- ✅ Content Details page
+  - ✅ Progress tracking
+  - ✅ Rating system
+  - ✅ View counter
+  - ✅ Rewards display
+- ✅ Quiz System
+  - ✅ Content-based quizzes (BASIS items)
+  - ✅ General quizzes
+  - ✅ Multiple choice questions
+  - ✅ Progress tracking
+  - ✅ Scoring system
+  - ✅ Completion rewards
+- ✅ Admin Panel
+  - ✅ Content management (CRUD)
+  - ✅ Quiz management
+  - ✅ User overview
+- ✅ Badges page
+- ✅ Leaderboard
+- ✅ Profile page with social features
 
-## Next Steps for Development
+## Recent Updates (Branch: ailiteracy11)
 
-The core infrastructure is complete! Here's what you can build next:
+### 🎉 Quiz System
+- Full quiz implementation for BASIS content items
+- General quiz system with questions and answers
+- Admin interface for quiz management
+- Automatic content completion after quiz success
+- Points and rewards integration
 
-### 1. **Dashboard Page** (High Priority)
-- User stats widget (points, level, streak)
-- Recent activities
-- Active challenges
-- Progress overview
-- Quick access to content
+### 🎨 UI Enhancements
+- Draggable content viewer window
+- Improved content filtering with PostgreSQL JSONB
+- BASIS tag filtering now working correctly
+- Enhanced navigation with Quiz link
 
-**API Endpoints Ready:**
-- `GET /api/progress/stats` - User statistics
-- `GET /api/social/feed` - Activity feed
-- `GET /api/challenges/my` - User challenges
-
-### 2. **Learning Materials Page** (High Priority)
-- Content grid/list view
-- Filters (type, difficulty, module)
-- Search functionality
-- Content cards with thumbnails
-- Progress indicators
-
-**API Endpoints Ready:**
-- `GET /api/content` - Get all content with filters
-- `GET /api/content/:id` - Get specific content
-
-### 3. **Content Viewer**
-- Display content details
-- Video/iframe embedding
-- Progress tracking
-- Comments section
-- Rating system
-- Related content
-
-**API Endpoints Ready:**
-- `POST /api/progress/:contentId` - Update progress
-- `POST /api/content/:id/rate` - Rate content
-- `GET /api/social/comments/:contentId` - Get comments
-- `POST /api/social/comments/:contentId` - Post comment
-
-### 4. **Badges Page**
-- Display all badges
-- Show earned vs locked badges
-- Progress towards badges
-- Badge details & requirements
-
-**API Endpoints Ready:**
-- `GET /api/badges` - All badges
-- `GET /api/badges/progress` - Badge progress
-
-### 5. **Leaderboard**
-- Top users by points
-- Filter by timeframe
-- User rankings
-- Profile links
-
-**API Endpoints Ready:**
-- `GET /api/social/leaderboard` - Get leaderboard
+### 🔧 Technical Improvements
+- Migrated from MySQL to PostgreSQL
+- Fixed tag filtering using JSONB containment operator (`@>`)
+- Optimized content queries with dynamic parameter counting
+- Database backup system
 
 ## Project Structure
 
@@ -181,12 +185,26 @@ The core infrastructure is complete! Here's what you can build next:
 AILiteracy/
 ├── server/                    # Backend (Node.js/Express)
 │   ├── config/
-│   │   ├── config.env        # ⚠️  Configure this!
-│   │   ├── db.js
-│   │   └── database.sql
+│   │   ├── .env              # ⚠️  Configure this!
+│   │   ├── db-postgres.js
+│   │   ├── db-universal.js
+│   │   └── database-postgres.sql
 │   ├── controllers/          # ✅ Complete
+│   │   ├── authController.js
+│   │   ├── badgeController.js
+│   │   ├── challengeController.js
+│   │   ├── contentController.js    # PostgreSQL optimized
+│   │   ├── contentQuizController.js # NEW
+│   │   ├── quizController.js       # NEW
+│   │   ├── progressController.js
+│   │   └── socialController.js
 │   ├── middleware/           # ✅ Complete
 │   ├── routes/               # ✅ Complete
+│   │   ├── contentQuiz.js    # NEW
+│   │   └── quiz.js           # NEW
+│   ├── migrations/           # Database migrations
+│   │   ├── add-quiz-system.sql
+│   │   └── add-content-quiz.sql
 │   ├── scripts/
 │   │   └── seedData.js       # ✅ Complete
 │   ├── utils/
@@ -196,24 +214,33 @@ AILiteracy/
 │   ├── public/
 │   └── src/
 │       ├── components/
-│       │   └── layout/
-│       │       └── Navbar.js # ✅ Complete
+│       │   ├── layout/
+│       │   │   └── Navbar.js       # ✅ Complete
+│       │   ├── common/
+│       │   │   └── ContentViewer.js # ✅ Draggable
+│       │   └── ContentQuizModal.js  # NEW
 │       ├── context/
-│       │   └── AuthContext.js # ✅ Complete
+│       │   └── AuthContext.js      # ✅ Complete
+│       ├── hooks/
+│       │   └── useDraggable.js     # NEW - Custom drag hook
 │       ├── pages/
-│       │   ├── Home.js       # ✅ Complete
-│       │   ├── Login.js      # ✅ Complete
-│       │   ├── Register.js   # ✅ Complete
-│       │   ├── Dashboard.js  # ⏳ Stub
-│       │   ├── Leermaterialen.js # ⏳ Stub
-│       │   ├── Badges.js     # ⏳ Stub
-│       │   ├── Leaderboard.js # ⏳ Stub
-│       │   └── Profile.js    # ⏳ Stub
+│       │   ├── Home.js             # ✅ Complete
+│       │   ├── Login.js            # ✅ Complete
+│       │   ├── Register.js         # ✅ Complete
+│       │   ├── Dashboard.js        # ✅ Complete
+│       │   ├── Leermaterialen.js   # ✅ Complete
+│       │   ├── ContentView.js      # ✅ Complete
+│       │   ├── Quiz.js             # ✅ Complete - NEW
+│       │   ├── Admin.js            # ✅ Complete - NEW
+│       │   ├── Badges.js           # ✅ Complete
+│       │   ├── Leaderboard.js      # ✅ Complete
+│       │   └── Profile.js          # ✅ Complete
 │       ├── utils/
-│       │   └── api.js        # ✅ Complete
-│       ├── App.js            # ✅ Complete
+│       │   └── api.js              # ✅ Complete
+│       ├── App.js                  # ✅ Complete
 │       └── index.js
 │
+├── backups/                   # Database backups
 ├── README.md                  # Full documentation
 ├── INSTALL.md                 # Detailed installation guide
 └── QUICKSTART.md             # This file
@@ -224,9 +251,11 @@ AILiteracy/
 ```bash
 # Backend
 cd server
-npm run dev          # Development mode (auto-restart)
 npm start            # Production mode
-node scripts/seedData.js  # Re-seed database
+npm run dev          # Development mode (if nodemon installed)
+node seed-database.js  # Re-seed database
+node run-quiz-migration.js  # Run quiz migration
+node run-content-quiz-migration.js  # Run content quiz migration
 
 # Frontend
 cd client
@@ -234,25 +263,32 @@ npm start            # Development server
 npm run build        # Production build
 
 # Database
-mysql -u root -p < server/config/database.sql  # Reset DB
+psql -U postgres -d ai_literacy_db -f server/config/database-postgres.sql  # Reset DB
 ```
 
 ## Troubleshooting
 
 ### Can't connect to database?
-1. Ensure MySQL is running
-2. Check credentials in `server/config/config.env`
-3. Verify database exists: `mysql -u root -p` then `SHOW DATABASES;`
+1. Ensure PostgreSQL is running
+2. Check credentials in `server/.env`
+3. Verify database exists: `psql -U postgres -l`
+4. Create database if needed: `createdb -U postgres ai_literacy_db`
 
 ### Port already in use?
 - Kill process on port 3000 (frontend) or 5002 (backend)
-- Or change ports in `config.env` and `client/package.json`
+- Windows: `taskkill /F /IM node.exe`
+- Or change ports in `.env` and `client/package.json`
 
 ### Module not found?
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
+
+### Quiz not showing?
+- Content must have the 'basis' tag to show quiz option
+- Run content quiz migration: `node run-content-quiz-migration.js`
+- Check if questions exist in database
 
 ## API Testing
 
@@ -270,31 +306,57 @@ Expected response:
 }
 ```
 
-## Key Features to Implement
+Test BASIS filter:
+```bash
+curl "http://localhost:5002/api/content?tag=basis"
+```
 
-1. **Dashboard** - User overview & stats
-2. **Learning Materials** - Browse & filter content
-3. **Content Viewer** - Watch/read content with progress tracking
-4. **Badges** - Show achievements
-5. **Leaderboard** - Rankings & competition
-6. **Profile** - User profiles with social features
-7. **Challenges** - Accept & track challenges
-8. **Admin Panel** - Content management (bonus)
+## Key Features
 
-All backend APIs for these features are already implemented! 🎉
+### 1. **Content Management** ✅
+- Browse learning materials by type
+- Search and filter content
+- Tag-based filtering (BASIS items)
+- Progress tracking
+- Rating system
 
-## Resources
+### 2. **Quiz System** ✅
+- BASIS content quizzes (integrated with content completion)
+- General quiz system
+- Multiple choice questions
+- Score tracking
+- Completion rewards
 
-- **Full Documentation**: See `README.md`
-- **Detailed Installation**: See `INSTALL.md`
-- **Database Schema**: See `server/config/database.sql`
-- **API Endpoints**: See `README.md` API section
+### 3. **Draggable Content Viewer** ✅
+- Drag and reposition content window
+- Video embedding (YouTube, Vimeo)
+- Audio embedding (Spotify)
+- Fullscreen mode
+- External link support
+
+### 4. **Admin Panel** ✅
+- Content CRUD operations
+- Quiz management
+- User management
+
+### 5. **Gamification** ✅
+- Points and levels
+- Badges and achievements
+- Challenges
+- Leaderboard
+
+### 6. **Social Features** ✅
+- User profiles
+- Activity feed
+- Comments and ratings
+- Leaderboard rankings
 
 ## Demo Data Included
 
 - 4 demo users (admin, students, teacher)
 - 4 learning modules
-- 10+ pieces of content (courses, videos, games, case studies)
+- 15+ pieces of content (courses, videos, podcasts, games, case studies)
+- 8 BASIS content items with quizzes
 - 10 badges with different rarities
 - 4 active challenges
 - Sample comments, ratings, and activities
@@ -303,7 +365,7 @@ All backend APIs for these features are already implemented! 🎉
 
 **Backend:**
 - Node.js + Express.js
-- MySQL (with mysql2)
+- PostgreSQL (with pg library)
 - JWT Authentication
 - bcryptjs for password hashing
 
@@ -313,17 +375,27 @@ All backend APIs for these features are already implemented! 🎉
 - Axios for API calls
 - React Icons
 - React Toastify
-- Framer Motion (ready for animations)
+- Custom hooks (useDraggable)
+
+## PostgreSQL Features Used
+
+✅ JSONB data type for tags
+✅ JSONB containment operator (`@>`)
+✅ Case-insensitive search (ILIKE)
+✅ Parameterized queries with `$1, $2, $3`
+✅ ON CONFLICT for upserts
+✅ Foreign key constraints
+✅ Transactions
 
 ## Security Features
 
 ✅ JWT-based authentication
 ✅ Password hashing (bcrypt)
 ✅ Protected API routes
-✅ Rate limiting
 ✅ Helmet.js security headers
 ✅ Input validation
-✅ SQL injection protection
+✅ SQL injection protection (parameterized queries)
+✅ CORS configuration
 
 ## Support
 
@@ -333,8 +405,19 @@ Need help? Check:
 3. Console logs for error messages
 4. Database connection with `curl http://localhost:5002/api/health`
 
+## GitHub Branch
+
+Current development branch: **ailiteracy11**
+
+Features in this branch:
+- Quiz system implementation
+- Draggable content viewer
+- PostgreSQL optimizations
+- BASIS filter fixes
+- Admin panel enhancements
+
 ---
 
-**Ready to build amazing AI literacy features! 🚀**
+**Ready to learn about AI! 🚀**
 
-Start by implementing the Dashboard or Learning Materials page using the ready-made API endpoints!
+The platform is fully functional with content management, quizzes, progress tracking, and gamification features!

@@ -30,8 +30,11 @@ app.use(cors({
   credentials: true
 }));
 
-// Security headers
-app.use(helmet());
+// Security headers - configure helmet for serving static React app
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP to allow React app to load properly
+  crossOriginEmbedderPolicy: false
+}));
 
 // Rate limiting
 const limiter = rateLimit({

@@ -21,10 +21,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS
+// CORS - in production, allow all origins since we're serving frontend and backend together
+// In development, restrict to localhost
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.CLIENT_URL
+    ? true  // Allow all origins in production
     : ['http://localhost:3000', 'http://192.168.178.79:3000'],
   credentials: true
 }));

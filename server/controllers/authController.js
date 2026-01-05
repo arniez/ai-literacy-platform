@@ -41,24 +41,32 @@ exports.register = async (req, res) => {
       [username, email, hashedPassword, firstName || null, lastName || null, studyProgram || null]
     );
 
-    // Create welcome notification
-    await insertAndGetId(
-      `INSERT INTO notifications (user_id, notification_type, title, message, link_url)
-       VALUES (?, 'system', 'Welcome to AI Literacy!', 'Start your journey by exploring learning materials', '/leermaterialen')`,
-      [userId]
-    );
-
-    // Award "AI Pioneer" welcome badge
-    const [welcomeBadge] = await query(
-      'SELECT id FROM badges WHERE name = ? LIMIT 1',
-      ['AI Pioneer']
-    );
-
-    if (welcomeBadge.length > 0) {
+    // Create welcome notification (optional - don't fail if table doesn't exist)
+    try {
       await insertAndGetId(
-        'INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)',
-        [userId, welcomeBadge[0].id]
+        `INSERT INTO notifications (user_id, notification_type, title, message, link_url)
+         VALUES (?, 'system', 'Welcome to AI Literacy!', 'Start your journey by exploring learning materials', '/leermaterialen')`,
+        [userId]
       );
+    } catch (error) {
+      console.log('Could not create welcome notification:', error.message);
+    }
+
+    // Award "AI Pioneer" welcome badge (optional - don't fail if table doesn't exist)
+    try {
+      const [welcomeBadge] = await query(
+        'SELECT id FROM badges WHERE name = ? LIMIT 1',
+        ['AI Pioneer']
+      );
+
+      if (welcomeBadge.length > 0) {
+        await insertAndGetId(
+          'INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)',
+          [userId, welcomeBadge[0].id]
+        );
+      }
+    } catch (error) {
+      console.log('Could not award welcome badge:', error.message);
     }
 
     const token = generateToken(userId);

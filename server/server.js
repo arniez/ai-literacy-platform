@@ -17,6 +17,9 @@ if (fs.existsSync(configPath)) {
 // Initialize app
 const app = express();
 
+// Trust proxy - required for Railway and rate limiting
+app.set('trust proxy', 1);
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

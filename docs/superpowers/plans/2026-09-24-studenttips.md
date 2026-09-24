@@ -35,6 +35,7 @@
 
 - `server/migrations/add-student-tips.postgres.sql` and `server/migrations/add-student-tips.mysql.sql`: additive schema for student submissions and review state, with each dialect's existing `users` and `content` integer keys.
 - `server/run-student-tips-migration.js` and `server/package.json`: select and run only the migration matching `DB_TYPE`; no reset or seed operation.
+- `server/tests/studentTipMigrationRunner.test.js`: verify dialect selection and reject unsupported database engines.
 - `server/utils/studentTipRules.js`: pure URL, field, and status-transition rules shared by the service and tests.
 - `server/config/db-universal.js`: expose a transaction helper for atomic draft conversion across the configured database pool.
 - `server/services/studentTipService.js`: validation, ownership-scoped reads, review queue queries, status changes, and conversion to a content draft.
@@ -53,6 +54,7 @@
 - Create: `server/run-student-tips-migration.js`
 - Create: `server/utils/studentTipRules.js`
 - Test: `server/tests/studentTipRules.test.js`
+- Test: `server/tests/studentTipMigrationRunner.test.js`
 - Modify: `server/package.json`
 
 **Interfaces:**
@@ -101,14 +103,14 @@ module.exports = { normalizeTipUrl, validateTipSubmission, validateTipReview };
 
 - [ ] **Step 4: Run focused tests and verify migration selection**
 
-Run from `server`: `node --test tests/studentTipRules.test.js`.
+Run from `server`: `node --test tests/studentTipRules.test.js tests/studentTipMigrationRunner.test.js`.
 
 Expected: PASS for safe URL normalization, invalid input, consent, required rejection note, and allowed/blocked transitions. Run `npm run db:migrate:student-tips` only against the configured local development database; expected: the new table and indexes exist and prior tables/rows remain present.
 
 - [ ] **Step 5: Commit the storage and rules slice**
 
 ```bash
-git add server/migrations/add-student-tips.postgres.sql server/migrations/add-student-tips.mysql.sql server/run-student-tips-migration.js server/utils/studentTipRules.js server/tests/studentTipRules.test.js server/package.json
+git add server/migrations/add-student-tips.postgres.sql server/migrations/add-student-tips.mysql.sql server/run-student-tips-migration.js server/utils/studentTipRules.js server/tests/studentTipRules.test.js server/tests/studentTipMigrationRunner.test.js server/package.json
 git commit -m "feat: add student tip storage and rules"
 ```
 

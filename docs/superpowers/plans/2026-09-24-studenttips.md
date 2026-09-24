@@ -175,6 +175,8 @@ git commit -m "feat: add portable database transactions"
 - Create: `server/controllers/studentTipController.js`
 - Create: `server/routes/studentTips.js`
 - Create: `server/tests/studentTipService.test.js`
+- Test: `server/tests/studentTipRoutes.test.js`
+- Modify: `server/config/db-universal.js`
 - Modify: `server/server.js`
 
 **Interfaces:**
@@ -199,7 +201,7 @@ test('published list never returns a teacher-only suggestion', async () => {
 
 - [ ] **Step 2: Run the service tests and confirm they fail**
 
-Run from `server`: `node --test tests/studentTipService.test.js`.
+Run from `server`: `node --test tests/studentTipService.test.js tests/studentTipRoutes.test.js`.
 
 Expected: FAIL because the service module is missing.
 
@@ -222,7 +224,7 @@ Expected: PASS for ownership, publication filtering, consent, rejection note, st
 - [ ] **Step 5: Commit the API slice**
 
 ```bash
-git add server/services/studentTipService.js server/controllers/studentTipController.js server/routes/studentTips.js server/tests/studentTipService.test.js server/server.js
+git add server/services/studentTipService.js server/controllers/studentTipController.js server/routes/studentTips.js server/tests/studentTipService.test.js server/tests/studentTipRoutes.test.js server/config/db-universal.js server/server.js
 git commit -m "feat: add student tip review API"
 ```
 

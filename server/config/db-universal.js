@@ -71,12 +71,12 @@ function withReturning(sql, columns = 'id') {
  */
 async function insertAndGetId(sql, params = []) {
   const insertSql = withReturning(sql, 'id');
-  const [rows, result] = await query(insertSql, params);
+  const [rows] = await query(insertSql, params);
 
   if (dbType === 'postgres') {
     return rows[0]?.id || null;
   } else {
-    return result.insertId;
+    return rows?.insertId ?? null;
   }
 }
 

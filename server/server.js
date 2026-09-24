@@ -43,6 +43,7 @@ app.use('/api/challenges', require('./routes/challenges'));
 app.use('/api/social', require('./routes/social'));
 app.use('/api/quiz', require('./routes/quiz'));
 app.use('/api/content-quiz', require('./routes/contentQuiz'));
+app.use('/api/student-tips', require('./routes/studentTips'));
 
 // Health check
 app.get('/api/health', (req, res) => {

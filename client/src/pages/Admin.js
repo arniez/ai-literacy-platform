@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLanguage } from '../context/LanguageContext';
+import { translateAiStudent } from '../utils/aiStudentTranslations';
+import AIStudentIntegrationAdmin from '../components/admin/AIStudentIntegrationAdmin';
 import './Admin.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
 
 function Admin() {
+  const { language } = useLanguage();
+  const [activeAdminTab, setActiveAdminTab] = useState('content');
   const [modules, setModules] = useState([]);
   const [content, setContent] = useState([]);
   const [selectedModule, setSelectedModule] = useState(null);
@@ -323,6 +328,15 @@ function Admin() {
       {success && <div className="alert alert-success">{success}</div>}
 
       <div className="admin-content">
+        <div className="admin-main-tabs" role="tablist" aria-label={language === 'en' ? 'Admin sections' : 'Beheersecties'}>
+          <button type="button" role="tab" aria-selected={activeAdminTab === 'content'} className={activeAdminTab === 'content' ? 'active' : ''} onClick={() => setActiveAdminTab('content')}>
+            {translateAiStudent('tabContent', language)}
+          </button>
+          <button type="button" role="tab" aria-selected={activeAdminTab === 'ai-students'} className={activeAdminTab === 'ai-students' ? 'active' : ''} onClick={() => setActiveAdminTab('ai-students')}>
+            {translateAiStudent('tabIntegration', language)}
+          </button>
+        </div>
+        {activeAdminTab === 'ai-students' ? <AIStudentIntegrationAdmin /> : <>
         {/* Module selector */}
         <div className="module-selector">
           <h2>Selecteer Module</h2>
@@ -668,6 +682,7 @@ function Admin() {
             )}
           </div>
         </div>
+        </>}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Leermaterialen from './pages/Leermaterialen';
+import StudentTips from './pages/StudentTips';
 import ContentView from './pages/ContentView';
 import Badges from './pages/Badges';
 import Leaderboard from './pages/Leaderboard';
@@ -114,6 +115,7 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route path="/studenttips" element={<ProtectedRoute><StudentTips /></ProtectedRoute>} />
         <Route
           path="/content/:id"
           element={

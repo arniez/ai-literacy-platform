@@ -1,0 +1,128 @@
+.student-tips-page { padding: 48px 0 0; color: var(--text-primary); }
+.student-tips-library-link { display: flex; align-items: center; gap: 16px; margin: 0 auto 28px; padding: 19px 22px; border: 1px solid #dce5d5; border-radius: 9px; background: #f1f5ec; color: var(--text-primary); }
+.student-tips-library-link:hover { border-color: #bdcbb8; color: var(--primary-dark); background: #eaf0e3; }
+.student-tips-library-link > div { flex: 1; min-width: 0; }
+.student-tips-library-link strong, .student-tips-library-link span { display: block; }
+.student-tips-library-link strong { font-size: 14px; font-weight: 650; }
+.student-tips-library-link span:not(.student-tips-library-tag) { margin-top: 3px; color: var(--text-secondary); font-size: 12px; }
+.student-tips-library-tag { flex: 0 0 auto; padding: 5px 9px; border-radius: 5px; background: #dce8d1; color: #39532e; font-size: 10px; font-weight: 650; }
+.student-tips-intro { max-width: 760px; margin-bottom: 34px; }
+.student-tips-intro h1 { margin: 13px 0 12px; font-size: clamp(34px, 4vw, 46px); letter-spacing: -1.6px; line-height: 1.1; }
+.student-tips-intro > p { color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
+.student-tips-submit-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(255px, .65fr); gap: 28px; align-items: start; }
+.student-tip-panel { padding: clamp(22px, 4vw, 38px); border: 1px solid var(--border-color); border-radius: 13px; background: #fff; box-shadow: var(--shadow-sm); }
+.student-tip-panel-heading { display: flex; align-items: center; gap: 15px; }
+.student-tip-icon { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 11px; background: #eaf0e2; color: var(--primary-dark); font-size: 20px; }
+.student-tip-panel-heading .eyebrow { margin-bottom: 6px; }
+.student-tip-panel-heading h2 { font-size: 26px; letter-spacing: -.6px; }
+.student-tip-intro-copy { max-width: 610px; margin: 18px 0 27px; color: var(--text-secondary); font-size: 14px; line-height: 1.75; }
+.student-tip-form { display: grid; gap: 17px; }
+.student-tip-form fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
+.student-tip-type-picker legend, .student-tip-consent legend { margin-bottom: 10px; color: var(--text-primary); font-size: 13px; font-weight: 650; }
+.student-tip-type-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.student-tip-type-picker legend { grid-column: 1 / -1; }
+.student-tip-type-picker label { display: flex; align-items: center; gap: 10px; min-height: 51px; padding: 11px 13px; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 12px; line-height: 1.4; transition: background .16s ease, border-color .16s ease; }
+.student-tip-type-picker label.selected { border-color: #9aac8d; background: #f2f5ed; color: var(--primary-dark); }
+.student-tip-type-picker label svg { flex: 0 0 auto; font-size: 17px; }
+.student-tip-type-picker input { accent-color: var(--primary-color); }
+.student-tip-field { display: grid; gap: 7px; }
+.student-tip-field > label { color: var(--text-primary); font-size: 12px; font-weight: 650; }
+.student-tip-field input, .student-tip-field textarea, .student-tip-field select { width: 100%; padding: 12px 13px; border: 1px solid #d8ded4; border-radius: 7px; background: #fff; color: var(--text-primary); font: inherit; font-size: 13px; line-height: 1.5; }
+.student-tip-field input:focus, .student-tip-field textarea:focus, .student-tip-field select:focus { border-color: #708a63; outline: 3px solid #dbe6d4; }
+.student-tip-field textarea { resize: vertical; min-height: 78px; }
+.student-tip-field input[aria-invalid="true"], .student-tip-field textarea[aria-invalid="true"] { border-color: #b4473c; }
+.student-tip-field-error { color: #a3352b; font-size: 12px; }
+.selected-material { display: flex; align-items: flex-start; gap: 8px; padding: 11px 12px; border-radius: 7px; background: #f2f5ed; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.selected-material svg { flex: 0 0 auto; margin-top: 2px; color: var(--primary-color); }
+.student-tip-consent { display: grid; gap: 10px; margin-top: 3px !important; padding: 17px !important; border: 1px solid var(--border-color) !important; border-radius: 9px; background: #fafbf8; }
+.student-tip-consent legend { padding: 0 4px; }
+.student-tip-consent label { display: flex; align-items: flex-start; gap: 10px; color: var(--text-primary); cursor: pointer; }
+.student-tip-consent input { flex: 0 0 auto; margin-top: 3px; accent-color: var(--primary-color); }
+.student-tip-consent label > span { display: grid; gap: 3px; }
+.student-tip-consent strong { font-size: 12px; font-weight: 600; }
+.student-tip-consent small { color: var(--text-secondary); font-size: 11px; line-height: 1.5; }
+.student-tip-consent label.disabled { opacity: .56; cursor: not-allowed; }
+.student-tip-submit { justify-self: start; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-width: 165px; margin-top: 2px; }
+.student-tip-submit:disabled { opacity: .65; cursor: wait; }
+.student-tip-error, .student-tip-success, .student-tip-duplicate { display: flex; align-items: flex-start; gap: 9px; padding: 12px 14px; border-radius: 7px; font-size: 12px; line-height: 1.55; }
+.student-tip-error { background: #fff0ed; color: #96392f; }
+.student-tip-success { background: #eef5e9; color: #315236; }
+.student-tip-success svg { flex: 0 0 auto; margin-top: 1px; }
+.student-tip-duplicate { background: #fff6e5; color: #70531c; }
+.student-tip-aside { position: sticky; top: 100px; }
+.student-tip-aside-card { padding: 26px; border-radius: 12px; background: #244b3c; color: #fff; }
+.student-tip-aside-icon { display: grid; place-items: center; width: 39px; height: 39px; margin-bottom: 22px; border-radius: 10px; background: #ffffff1c; color: #d7e8c9; font-size: 18px; }
+.student-tip-aside-card .eyebrow { color: #c6d8c4; }
+.student-tip-aside-card h2 { margin: 12px 0; font-size: 23px; line-height: 1.22; letter-spacing: -.5px; }
+.student-tip-aside-card > p { color: #d7e3d8; font-size: 13px; line-height: 1.75; }
+.student-tip-aside-points { display: grid; gap: 12px; margin-top: 23px; padding-top: 19px; border-top: 1px solid #ffffff2b; }
+.student-tip-aside-points span { display: flex; align-items: center; gap: 9px; color: #f1f4ec; font-size: 11px; }
+.student-tip-aside-points svg { color: #d1e6b5; font-size: 15px; }
+.student-tip-aside-link { display: flex; justify-content: space-between; gap: 10px; margin-top: 13px; padding: 16px 17px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; color: var(--text-primary); font-size: 12px; font-weight: 650; }
+.student-tip-aside-link:hover { color: var(--primary-dark); border-color: #b8c9af; }
+.student-tips-section { margin-top: 62px; scroll-margin-top: 90px; }
+.student-tips-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.student-tips-section-heading .eyebrow { margin-bottom: 8px; }
+.student-tips-section-heading h2 { font-size: 26px; letter-spacing: -.7px; }
+.student-tips-section-heading p { margin-top: 7px; color: var(--text-secondary); font-size: 13px; }
+.student-tip-count { display: grid; place-items: center; min-width: 32px; height: 32px; padding: 0 9px; border-radius: 50px; background: #edf1e7; color: var(--primary-dark); font-size: 12px; font-weight: 650; }
+.student-tip-grid, .my-tip-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.student-tip-card, .my-tip-card { min-width: 0; padding: 22px; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; }
+.student-tip-card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+.student-tip-kicker { color: var(--primary-dark); font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; }
+.student-tip-author { color: var(--text-secondary); font-size: 11px; }
+.student-tip-card h3, .my-tip-card h3 { font-size: 17px; line-height: 1.4; letter-spacing: -.25px; }
+.student-tip-summary { margin: 9px 0 16px; color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
+.student-tip-detail { display: grid; grid-template-columns: 115px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid #edf0ea; }
+.student-tip-detail > span { color: var(--text-secondary); font-size: 11px; font-weight: 600; }
+.student-tip-detail p { color: var(--text-primary); font-size: 12px; line-height: 1.6; }
+.student-tip-source { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; color: var(--primary-dark); font-size: 12px; font-weight: 650; }
+.student-tip-source:hover { color: var(--primary-color); text-decoration: underline; }
+.student-tip-source svg { flex: 0 0 auto; }
+.my-tip-card { display: grid; gap: 10px; background: #fcfcfa; }
+.my-tip-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.my-tip-card > p { color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
+.tip-status { flex: 0 0 auto; padding: 5px 8px; border-radius: 20px; background: #edf1e7; color: #43533d; font-size: 10px; font-weight: 650; }
+.tip-status-declined { background: #f7e9e5; color: #8d4035; }
+.tip-status-published, .tip-status-added { background: #e7f1e2; color: #315b35; }
+.tip-status-hidden { background: #ecece8; color: #62655e; }
+.reviewer-note { padding: 11px 12px; border-left: 3px solid #b7c9aa; background: #f2f5ed; }
+.reviewer-note strong { font-size: 11px; }
+.reviewer-note p { margin-top: 5px; color: var(--text-secondary); font-size: 12px; line-height: 1.55; }
+.student-tips-empty { display: grid; justify-items: center; gap: 6px; padding: 43px 20px; border: 1px dashed #d4dcd0; border-radius: 10px; background: #fafbf8; color: var(--text-secondary); text-align: center; }
+.student-tips-empty > svg { margin-bottom: 5px; color: #879780; font-size: 21px; }
+.student-tips-empty p { color: var(--text-primary); font-size: 14px; font-weight: 600; }
+.student-tips-empty span { font-size: 12px; }
+.student-tips-empty.compact { padding: 28px 20px; }
+.student-tips-footnote { margin-top: 58px; padding: 22px 0; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 12px; }
+.student-tips-state { min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; color: var(--text-secondary); text-align: center; }
+.student-tips-state h1 { color: var(--text-primary); font-size: 24px; }
+.student-tips-spinner { width: 27px; height: 27px; border: 2px solid #d8e0d3; border-top-color: var(--primary-color); border-radius: 50%; animation: student-tip-spin .8s linear infinite; }
+@keyframes student-tip-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 850px) {
+  .student-tips-submit-layout { grid-template-columns: 1fr; }
+  .student-tip-aside { position: static; display: grid; grid-template-columns: 1fr 230px; gap: 13px; align-items: stretch; }
+  .student-tip-aside-link { margin: 0; align-items: center; }
+}
+@media (max-width: 620px) {
+  .student-tips-page { padding-top: 30px; }
+  .student-tips-submit-layout { gap: 16px; }
+  .student-tip-panel { padding: 20px 16px; }
+  .student-tip-type-picker { grid-template-columns: 1fr; }
+  .student-tips-library-link { gap: 12px; padding: 15px; }
+  .student-tips-library-tag { display: none; }
+  .student-tip-aside { grid-template-columns: 1fr; }
+  .student-tip-aside-card { padding: 22px; }
+  .student-tip-aside-link { padding: 13px 15px; }
+  .student-tip-grid, .my-tip-grid { grid-template-columns: 1fr; }
+  .student-tips-section { margin-top: 44px; }
+  .student-tip-detail { grid-template-columns: 95px minmax(0, 1fr); gap: 8px; }
+  .student-tips-section-heading h2 { font-size: 22px; }
+  .student-tip-card, .my-tip-card { padding: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student-tip-type-picker label { transition: none; }
+  .student-tips-spinner { animation-duration: 1.5s; }
+}

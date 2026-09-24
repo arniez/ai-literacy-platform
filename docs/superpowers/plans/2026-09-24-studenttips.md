@@ -238,7 +238,8 @@ git commit -m "feat: add student tip review API"
 - Modify: `client/src/App.js`
 - Modify: `client/src/pages/ContentView.js`
 - Modify: `client/src/pages/Leermaterialen.js`
-- Modify: `client/src/context/prototypeTranslations.js`
+- Create: `client/src/utils/studentTipTranslations.js`
+- Modify: `server/services/studentTipService.js` and `server/controllers/studentTipController.js` to return field-level validation errors for the student form.
 
 **Interfaces:**
 - `buildStudentTipPayload(formState)` returns the API's camelCase payload and defaults `shareWithStudents` and `displayFirstName` to `false`.
@@ -288,7 +289,7 @@ Expected: PASS; build completes without missing translation imports, route error
 - [ ] **Step 5: Commit the student slice**
 
 ```bash
-git add client/src/pages/StudentTips.js client/src/pages/StudentTips.css client/src/utils/studentTips.js client/src/utils/studentTips.test.js client/src/App.js client/src/pages/ContentView.js client/src/pages/Leermaterialen.js client/src/context/prototypeTranslations.js
+git add client/src/pages/StudentTips.js client/src/pages/StudentTips.css client/src/utils/studentTips.js client/src/utils/studentTips.test.js client/src/utils/studentTipTranslations.js client/src/App.js client/src/pages/ContentView.js client/src/pages/Leermaterialen.js server/services/studentTipService.js server/controllers/studentTipController.js
 git commit -m "feat: add student tip submission and discovery"
 ```
 

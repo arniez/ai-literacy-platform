@@ -10,10 +10,12 @@ const service = createStudentTipService({ query, insertAndGetId, withTransaction
 function sendError(res, error) {
   const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 500;
   if (statusCode >= 500) console.error('Student tip request error:', error);
-  return res.status(statusCode).json({
+  const response = {
     success: false,
     message: statusCode >= 500 ? 'Server error' : error.message
-  });
+  };
+  if (Array.isArray(error.validationErrors)) response.errors = error.validationErrors;
+  return res.status(statusCode).json(response);
 }
 
 exports.create = async (req, res) => {

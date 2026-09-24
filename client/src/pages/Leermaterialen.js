@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaFilter, FaStar, FaEye, FaBook, FaVideo, FaHeadphones, FaGamepad, FaBriefcase, FaCheck } from 'react-icons/fa';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
+import { useLanguage } from '../context/LanguageContext';
+import { translateStudentTipText } from '../utils/studentTips';
 import './Leermaterialen.css';
 
 const Leermaterialen = () => {
   const navigate = useNavigate();
+  const { t: defaultTranslate, language } = useLanguage();
+  const t = (key, values) => translateStudentTipText(language, key, values, defaultTranslate);
   const location = useLocation();
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -193,6 +197,13 @@ const Leermaterialen = () => {
         </div>
       </div>
 
+      <div className="container">
+        <Link className="student-tips-library-link" to="/studenttips">
+          <span className="student-tips-library-tag">{t('Van studenten')}</span>
+          <div><strong>{t('Tips van studenten')}</strong><span>{t('Deel wat jou helpt en ontdek wat anderen aanraden.')}</span></div>
+          <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
       {/* Content Grid */}
       <div className="content-section">
         <div className="container">

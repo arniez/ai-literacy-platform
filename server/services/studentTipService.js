@@ -44,7 +44,11 @@ function createStudentTipService({ query, insertAndGetId, withTransaction } = {}
   async function createSuggestion(studentId, input = {}) {
     if (typeof insertAndGetId !== 'function') throw new Error('An insert adapter is required.');
     const validation = validateTipSubmission(input);
-    if (validation.errors.length) throw tipError(validation.errors.join(' '));
+    if (validation.errors.length) {
+      const error = tipError(validation.errors.join(' '));
+      error.validationErrors = validation.errors;
+      throw error;
+    }
 
     const isInternal = input.contentId !== undefined && input.contentId !== null && input.contentId !== '';
     let title = typeof input.title === 'string' ? input.title.trim() : '';

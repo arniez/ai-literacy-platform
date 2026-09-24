@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { FaArrowLeft, FaStar, FaEye, FaClock, FaBook, FaVideo, FaHeadphones, FaGamepad, FaBriefcase, FaPlay, FaCheck, FaExternalLinkAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import ContentViewer from '../components/common/ContentViewer';
 import ContentQuizModal from '../components/ContentQuizModal';
+import { useLanguage } from '../context/LanguageContext';
+import { translateStudentTipText } from '../utils/studentTips';
 import './ContentView.css';
 
 const ContentView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t: defaultTranslate, language } = useLanguage();
+  const t = (key, values) => translateStudentTipText(language, key, values, defaultTranslate);
   const { user } = useAuth();
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -287,6 +291,11 @@ const ContentView = () => {
               <div className="content-description">
                 <h2>Over deze content</h2>
                 <p>{content.description}</p>
+              </div>
+              <div className="content-link">
+                <Link to={'/studenttips?contentId=' + content.id} className="btn btn-outline btn-lg">
+                  {t('Deel dit leermateriaal')}
+                </Link>
               </div>
 
               {/* Content Actions */}

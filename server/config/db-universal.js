@@ -4,6 +4,7 @@
  */
 
 const { pool, testConnection, dbType } = require('./db-factory');
+const { createTransactionRunner } = require('./transactionRunner');
 
 /**
  * Execute a query with automatic parameter conversion
@@ -90,10 +91,13 @@ function getAffectedRows(result) {
   }
 }
 
+const withTransaction = createTransactionRunner({ dbType, pool });
+
 module.exports = {
   pool,
   query,
   insertAndGetId,
+  withTransaction,
   getInsertId,
   withReturning,
   getAffectedRows,

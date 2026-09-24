@@ -1,0 +1,925 @@
+{
+  "sourceCheckedAt": "2026-09-24",
+  "courses": [
+    {
+      "provider": "aivoorstudenten",
+      "courseVersion": "2025",
+      "overviewUrl": "https://aivoorstudenten.nl/e-learning-2025",
+      "lessons": [
+        {
+          "externalId": "1.1",
+          "title": "Waarom zou je AI moeten leren?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/waarom-zou-je-ai-moeten-leren",
+          "durationMinutes": 5,
+          "pageHeading": "Waarom zou je AI moeten leren?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/ceg7TMWVlvM",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.2",
+          "title": "Inleiding van deze cursus - 4 basisprincipes",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-inleiding-van-deze-cursus",
+          "durationMinutes": 5,
+          "pageHeading": "Inleiding van deze cursus - 4 basisprincipes",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/XnYM5B6_41w",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.3",
+          "title": "Wat is generatieve AI?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/wat-is-generatieve-ai",
+          "durationMinutes": 8,
+          "pageHeading": "Wat is generatieve AI?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/SSsWWBGASlw",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.4",
+          "title": "Welke aanbieder + betalen of niet?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-4-welke-aanbieder-betalen-of-niet",
+          "durationMinutes": 7,
+          "pageHeading": "Welke aanbieder + betalen of niet?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/t51H0Zj3YcI",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.5",
+          "title": "Kunnen we de output van AI vertrouwen?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-3",
+          "durationMinutes": 8,
+          "pageHeading": "Kunnen we de output van AI vertrouwen?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/o7yDVgTpZjw",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.6",
+          "title": "Andere nadelen",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-6-andere-nadelen",
+          "durationMinutes": 8,
+          "pageHeading": "Andere nadelen",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/VbC0-CjXzAc",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.7",
+          "title": "Disharmonieus systeem",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-6-disharmonieus-systeem",
+          "durationMinutes": 9,
+          "pageHeading": "Disharmonieus systeem",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/Zh3cOM-t-3I",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.8",
+          "title": "Misverstanden en mythes",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-5-opbouw-van-deze-e-learning",
+          "durationMinutes": 9,
+          "pageHeading": "Misverstanden en mythes",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/TfIIMI6VGfs",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.9",
+          "title": "Opbouw van deze e-learning",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-6-opbouw-van-deze-e-learning",
+          "durationMinutes": 4,
+          "pageHeading": "Opbouw van deze e-learning",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/9E7BzLj5eoo",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "1.10",
+          "title": "Samenvatting Basis",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-basis",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Basis",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "1.11",
+          "title": "Quiz Basis",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/quiz-basis",
+          "durationMinutes": 10,
+          "pageHeading": "Quiz Basis",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "2.1",
+          "title": "Prompting 1 - De waarde van goed prompten",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-1-prompting-1",
+          "durationMinutes": 14,
+          "pageHeading": "Prompting 1 - De waarde van goed prompten",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/xnLLuY_fXvc",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.2",
+          "title": "Prompting 2 - Duidelijke instructies geven",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-prompting-2",
+          "durationMinutes": 10,
+          "pageHeading": "Prompting 2 - Duidelijke instructies geven",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/NA5OI_vtzJQ",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.3",
+          "title": "Prompting 3 - Workflow",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-3-prompting-3",
+          "durationMinutes": 7,
+          "pageHeading": "Prompting 3 - Workflow",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/AskLoT5wHYc",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.4",
+          "title": "Prompting 4 - Slimmer prompten",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-4-prompting-4",
+          "durationMinutes": 14,
+          "pageHeading": "Prompting 4 - Slimmer prompten",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/n4G17J1_l8Q",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.5",
+          "title": "Prompting 5 - Aan de slag",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-5-prompting-5",
+          "durationMinutes": 6,
+          "pageHeading": "Prompting 5 - Aan de slag",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/aF60tNodf0g",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.6",
+          "title": "GPTs 1 - Wat zijn GPTs",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-6-gpts-1-inleiding",
+          "durationMinutes": 5,
+          "pageHeading": "GPTs 1 - Wat zijn GPTs",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/MAKBUHiilBs",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.7",
+          "title": "GPTs 2 - Voorbeelden en wanneer zet je GPTs in?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/gpts-2-wanneer-zetten-we-gpts-in",
+          "durationMinutes": 11,
+          "pageHeading": "GPTs 2 - Voorbeelden en wanneer zet je GPTs in?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/U_2hhN9BANU",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.8",
+          "title": "GPTs 3 - GPTs maken",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-7-gpts-2-maken-gpts",
+          "durationMinutes": 14,
+          "pageHeading": "GPTs 3 - GPTs maken",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/-6Im66TMKEE",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.9",
+          "title": "Prompting en GPTs in de praktijk",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/prompting-en-gpts-in-de-praktijk",
+          "durationMinutes": 60,
+          "pageHeading": "Prompting en GPTs in de praktijk",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "2.10",
+          "title": "Transcriberen",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-8-transcriberen",
+          "durationMinutes": 7,
+          "pageHeading": "Transcriberen",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/xppnSLDI4XM",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.11",
+          "title": "Transcriberen van gevoelige data",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-9-ai-mindset",
+          "durationMinutes": 4,
+          "pageHeading": "Transcriberen van gevoelige data",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/qdBVnsRYKTA",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "2.12",
+          "title": "Samenvatting Vaardigheden",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-vaardigheden",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Vaardigheden",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "2.13",
+          "title": "Quiz Vaardigheden",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/quiz-vaardigheden",
+          "durationMinutes": 10,
+          "pageHeading": "Quiz Vaardigheden",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "3.1",
+          "title": "Introductie - Verslagen maken",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-1-introductie",
+          "durationMinutes": 2,
+          "pageHeading": "Introductie - Verslagen maken",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/ZUZgbPq7eYY",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "3.2",
+          "title": "Praktijkvoorbeeld 1 - Ondernemersplan",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-praktijkvoorbeeld-1-scriptie",
+          "durationMinutes": 53,
+          "pageHeading": "Praktijkvoorbeeld 1 - Ondernemersplan",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/ef8l3HOZIq8",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "3.3",
+          "title": "Tussendoortje: motivatie door AI Joel Beukers",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/tussendoortje-motivatie-door-ai-joel-beukers",
+          "durationMinutes": 3,
+          "pageHeading": "Tussendoortje: motivatie door AI Joel Beukers",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "3.4",
+          "title": "Zoeken van bronnen met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-zoeken-van-bronnen",
+          "durationMinutes": 16,
+          "pageHeading": "Zoeken van bronnen met AI",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/3XEV8AdjLsY",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "3.5",
+          "title": "Praktijkvoorbeeld 2 - Scriptie schrijven met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-3l-praktijkvoorbeeld-2-x",
+          "durationMinutes": 45,
+          "pageHeading": "Praktijkvoorbeeld 2 - Scriptie schrijven met AI",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/bufP-NmLFEY",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "3.6",
+          "title": "Hoe ga je om met een AI-verbod?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-5-hoe-ga-je-om-met-plagiaat-verbod",
+          "durationMinutes": 6,
+          "pageHeading": "Hoe ga je om met een AI-verbod?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/GC9DBdK3VUY",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "3.7",
+          "title": "Samenvatting Geschreven tekst",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-genereren-van-geschreven-tekst",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Geschreven tekst",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "3.8",
+          "title": "Quiz Geschreven tekst",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/quiz-geschreven-tekst-genereren",
+          "durationMinutes": 10,
+          "pageHeading": "Quiz Geschreven tekst",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "4.1",
+          "title": "Presentatie maken - PowerPoint + veelgestelde vragen",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-1-mindset-om-te-leren",
+          "durationMinutes": 8,
+          "pageHeading": "Presentatie maken - PowerPoint + veelgestelde vragen",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/XtVdUr5W9Jw",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "4.2",
+          "title": "Lezen en leren van papers",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-lezen-leren-van-papers",
+          "durationMinutes": 14,
+          "pageHeading": "Lezen en leren van papers",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/toPfd4I64Pg",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "4.3",
+          "title": "Bouw je eigen AI-tutor",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-3-2",
+          "durationMinutes": 17,
+          "pageHeading": "Bouw je eigen AI-tutor",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/pAheuBEPEY8",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "4.4",
+          "title": "Brainstormen met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-4-brainstormen-met-ai",
+          "durationMinutes": 6,
+          "pageHeading": "Brainstormen met AI",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/XOlCoQ2csk0",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "4.5",
+          "title": "AI-mindset voor nog veel meer toepassingen",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/ai-mindset-voor-nog-veel-meer-use-cases",
+          "durationMinutes": 6,
+          "pageHeading": "AI-mindset voor nog veel meer toepassingen",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/b96IZSPj5vs",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "4.6",
+          "title": "Funquiz voor de AI-mindset",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/fun-quiz-voor-de-ai-mindset",
+          "durationMinutes": 5,
+          "pageHeading": "Funquiz voor de AI-mindset",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "4.7",
+          "title": "Samenvatting Leren en werken met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-leren-en-werken-met-ai",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Leren en werken met AI",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "4.8",
+          "title": "Quiz Leren en werken met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/quiz-leren-en-werken-met-ai",
+          "durationMinutes": 10,
+          "pageHeading": "Quiz Leren en werken met AI",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "5.1",
+          "title": "Inleiding in andere taken met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-1-inleiding",
+          "durationMinutes": 2,
+          "pageHeading": "Inleiding in andere taken met AI",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/EQjs0vKyibI",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.2",
+          "title": "Afbeeldingen genereren",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-afbeeldingen",
+          "durationMinutes": 11,
+          "pageHeading": "Afbeeldingen genereren",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/kK7mZi5Mjts",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.3",
+          "title": "Muziek genereren",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-4-muziek",
+          "durationMinutes": 7,
+          "pageHeading": "Muziek genereren",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/EFPsHL_mA0A",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.4",
+          "title": "Text-to-Speech en voice cloning",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-5-voice-cloning",
+          "durationMinutes": 7,
+          "pageHeading": "Text-to-Speech en voice cloning",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/8Y3zLxHJVuY",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.5",
+          "title": "Advanced Voice Mode - Speech-to-Speech",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-7-advanced-voice-mode",
+          "durationMinutes": 5,
+          "pageHeading": "Advanced Voice Mode - Speech-to-Speech",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/biJISpRjMDE",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.6",
+          "title": "Data-analyse",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-6-data-analyse",
+          "durationMinutes": 14,
+          "pageHeading": "Data-analyse",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/hzaVlY289Tw",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "5.7",
+          "title": "Samenvatting Andere taken",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-andere-taken",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Andere taken",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "5.8",
+          "title": "Quiz Andere taken",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/quiz-andere-taken",
+          "durationMinutes": 10,
+          "pageHeading": "Quiz Andere taken",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "6.1",
+          "title": "Wat kunnen we verwachten van AI in de nabije toekomst?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-1-wat-kunnen-we-verwachten-van-ai-in-de-nabije-toekomst",
+          "durationMinutes": 6,
+          "pageHeading": "Wat kunnen we verwachten van AI in de nabije toekomst?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/qy8sTQzmcMA",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "6.2",
+          "title": "Hoe speel je in op een toekomst met AI?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-2-welke-functionaliteiten-mag-je-op-korte-termijn-verwachten",
+          "durationMinutes": 5,
+          "pageHeading": "Hoe speel je in op een toekomst met AI?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/mWXg65tEM7g",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "6.3",
+          "title": "Hoe blijf je op de hoogte van het AI-nieuws?",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-3-hoe-blijf-je-op-de-hoogte-van-het-ai-nieuws",
+          "durationMinutes": 6,
+          "pageHeading": "Hoe blijf je op de hoogte van het AI-nieuws?",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/mB3ElWIaLPc",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "6.4",
+          "title": "Samenvatting Toekomst",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/samenvatting-toekomst",
+          "durationMinutes": 20,
+          "pageHeading": "Samenvatting Toekomst",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        },
+        {
+          "externalId": "6.5",
+          "title": "Afsluiting",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/les-4-afsluiting",
+          "durationMinutes": 2,
+          "pageHeading": "Afsluiting",
+          "videoUrl": "https://www.youtube-nocookie.com/embed/TeLR3QV7s54",
+          "availabilityStatus": "available"
+        },
+        {
+          "externalId": "6.6",
+          "title": "Certificering AI Voor Studenten",
+          "lessonUrl": "https://aivoorstudenten.nl/e-learning-2025/certificering-ai-voor-studenten",
+          "durationMinutes": 1,
+          "pageHeading": "Certificering AI Voor Studenten",
+          "availabilityStatus": "no_video",
+          "unavailableReason": "Deze bronpagina bevat geen ingebedde video."
+        }
+      ]
+    },
+    {
+      "provider": "aivoorstudenten",
+      "courseVersion": "2026",
+      "overviewUrl": "https://aivoorstudenten.nl/cursus",
+      "lessons": [
+        {
+          "externalId": "1.1",
+          "title": "Waarom AI een basisvaardigheid wordt",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "1.2",
+          "title": "Zo haal je het meeste uit deze cursus",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "1.3",
+          "title": "Wat is generatieve AI?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "1.4",
+          "title": "Waarom AI soms briljant en soms onhandig is",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "1.5",
+          "title": "Welke AI-aanpak past bij je taak?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "1.6",
+          "title": "Jij → AI → jij: je eerste slimme workflow",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "2.1",
+          "title": "Van vage vraag naar duidelijke opdracht",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "2.2",
+          "title": "Geef AI context en bruikbaar materiaal",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "2.3",
+          "title": "Laat AI vragen stellen en een plan maken",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "2.4",
+          "title": "Verbeter met criteria en feedback",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "2.5",
+          "title": "Van eerste vraag naar goed resultaat",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.1",
+          "title": "AI als persoonlijke tutor",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.2",
+          "title": "Moeilijke stof laten uitleggen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.3",
+          "title": "Samenvatten zonder je denken uit te zetten",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.4",
+          "title": "Jezelf laten overhoren",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.5",
+          "title": "Leren voor toetsen, tentamens en examens",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.6",
+          "title": "Exacte vakken leren met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.7",
+          "title": "Leren met afbeeldingen, schema's en mindmaps",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.8",
+          "title": "Leren met audio, podcast en video-uitleg",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "3.9",
+          "title": "Papers, hoofdstukken en lange teksten begrijpen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.1",
+          "title": "Van opdracht naar aanpak",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.2",
+          "title": "Brainstormen met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.3",
+          "title": "Een onderzoeksvraag of hoofdvraag maken",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.4",
+          "title": "Bronnen zoeken en beoordelen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.5",
+          "title": "Lange bronnen begrijpen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.6",
+          "title": "Structuur maken voor je tekst",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.7",
+          "title": "Feedback vragen op je tekst",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.8",
+          "title": "Claims en bronnen controleren",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "4.9",
+          "title": "Je AI-gebruik uitleggen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.1",
+          "title": "Een presentatie maken met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.2",
+          "title": "Slides verbeteren",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.3",
+          "title": "Afbeeldingen maken voor een opdracht of presentatie",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.4",
+          "title": "Data analyseren met AI",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.5",
+          "title": "Planning en productiviteit",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.6",
+          "title": "Sollicitatie- en stagevoorbereiding",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "5.7",
+          "title": "Creatieve toepassingen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.1",
+          "title": "Wat is vibe coding?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.2",
+          "title": "Van idee naar bouwplan",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.3",
+          "title": "Je eerste website of app bouwen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.4",
+          "title": "Verbeteren door testen en feedback",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.5",
+          "title": "Begrijpen wat je hebt gebouwd",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.6",
+          "title": "Publiceren, delen en grenzen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "6.7",
+          "title": "Vibe-coding eindchallenge",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.1",
+          "title": "Wat doe jij en wat laat je AI doen?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.2",
+          "title": "Wanneer kun je AI vertrouwen?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.3",
+          "title": "Wat deel je wel en niet met AI?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.4",
+          "title": "Werk eerlijk en maak je AI-gebruik zichtbaar",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.5",
+          "title": "Bias en blinde vlekken",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.6",
+          "title": "Maak en deel AI-content verantwoord",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "7.7",
+          "title": "Welke impact heeft AI buiten jouw scherm?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "8.1",
+          "title": "Welke AI-vaardigheden worden belangrijk?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "8.2",
+          "title": "AI in studie, stage en werk",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "8.3",
+          "title": "Hoe blijf je bij zonder alles te volgen?",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "8.4",
+          "title": "Nieuwe AI-tools beoordelen",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "8.5",
+          "title": "Jouw persoonlijke AI-aanpak",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "9.1",
+          "title": "Kies je eindopdracht",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "9.2",
+          "title": "Bouw je eigen AI-workflow",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "9.3",
+          "title": "Verbeter je resultaat",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "9.4",
+          "title": "Leg je AI-gebruik uit",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        },
+        {
+          "externalId": "9.5",
+          "title": "Eindcheck en certificaat",
+          "lessonUrl": "https://aivoorstudenten.nl/cursus",
+          "availabilityStatus": "upcoming",
+          "unavailableReason": "Binnenkort — er is nog geen lesvideo beschikbaar."
+        }
+      ]
+    }
+  ]
+}

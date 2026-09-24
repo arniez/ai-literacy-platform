@@ -9,7 +9,7 @@ exports.getUserProgress = async (req, res) => {
       `SELECT up.*, c.title, c.content_type, c.thumbnail_url, c.points_reward
        FROM user_progress up
        JOIN content c ON up.content_id = c.id
-       WHERE up.user_id = ?
+       WHERE up.user_id = ? AND c.is_published = true
        ORDER BY up.last_accessed DESC`,
       [req.user.id]
     );
@@ -38,7 +38,7 @@ exports.updateProgress = async (req, res) => {
 
     // Check if content exists
     const [content] = await query(
-      'SELECT id, points_reward FROM content WHERE id = ?',
+      'SELECT id, points_reward FROM content WHERE id = ? AND is_published = true',
       [contentId]
     );
 

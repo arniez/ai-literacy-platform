@@ -172,6 +172,11 @@ exports.toggleFollow = async (req, res) => {
 // @access  Public
 exports.getComments = async (req, res) => {
   try {
+    const [content] = await executeQuery('SELECT id FROM content WHERE id = ? AND is_published = true', [req.params.contentId]);
+    if (content.length === 0) {
+      return res.status(404).json({ success: false, message: 'Content not found' });
+    }
+
     const [comments] = await executeQuery(
       `SELECT c.*, u.username, u.first_name, u.last_name, u.avatar_url, u.level,
               (SELECT COUNT(*) FROM comment_likes WHERE comment_id = c.id) as actual_likes_count
@@ -223,6 +228,12 @@ exports.postComment = async (req, res) => {
       });
     }
 
+    const [content] = await executeQuery('SELECT id FROM content WHERE id = ? AND is_published = true', [req.params.contentId]);
+    if (content.length === 0) {
+      return res.status(404).json({ success: false, message: 'Content not found' });
+    }
+
+
     const [result] = await executeQuery(
       'INSERT INTO comments (user_id, content_id, parent_comment_id, comment_text) VALUES (?, ?, ?, ?)',
       [req.user.id, req.params.contentId, parentCommentId || null, commentText.trim()]
@@ -260,6 +271,17 @@ exports.postComment = async (req, res) => {
 // @access  Private
 exports.toggleCommentLike = async (req, res) => {
   try {
+    const [commentRows] = await executeQuery(
+      `SELECT comments.id
+       FROM comments
+       JOIN content ON content.id = comments.content_id
+       WHERE comments.id = ? AND content.is_published = true`,
+      [req.params.commentId]
+    );
+    if (commentRows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Content not found' });
+    }
+
     const [existing] = await executeQuery(
       'SELECT id FROM comment_likes WHERE user_id = ? AND comment_id = ?',
       [req.user.id, req.params.commentId]

@@ -127,9 +127,12 @@ exports.getContent = async (req, res) => {
 exports.getContentById = async (req, res) => {
   try {
     const [content] = await executeQuery(
-      `SELECT c.*, m.title as module_title
+      `SELECT c.*, m.title as module_title,
+              external_lessons.lesson_url AS external_lesson_url,
+              external_lessons.course_version AS external_course_version
        FROM content c
        LEFT JOIN modules m ON c.module_id = m.id
+       LEFT JOIN external_lessons ON external_lessons.content_id = c.id AND external_lessons.provider = 'aivoorstudenten'
        WHERE c.id = $1 AND c.is_published = true`,
       [req.params.id]
     );
@@ -217,7 +220,7 @@ exports.rateContent = async (req, res) => {
 
     // Check if content exists
     const [content] = await executeQuery(
-      'SELECT id FROM content WHERE id = $1',
+      'SELECT id FROM content WHERE id = $1 AND is_published = true',
       [req.params.id]
     );
 

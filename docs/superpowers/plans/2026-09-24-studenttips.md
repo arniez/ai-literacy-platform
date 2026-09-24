@@ -44,7 +44,7 @@
 - `client/src/pages/StudentTipReview.js` and `client/src/pages/StudentTipReview.css`: teacher/admin review queue and actions.
 - `client/src/utils/studentTips.js` and its test: deterministic payload formatting and safe link/view-model behavior.
 - `client/src/utils/studentTipReview.js` and its test: deterministic review payloads for decline, publication, hiding, and draft conversion.
-- `client/src/App.js`, `client/src/components/layout/Navbar.js`, `client/src/pages/ContentView.js`, and `client/src/context/prototypeTranslations.js`: routes, role-aware entry points, content-detail shortcut, and NL/ENG labels.
+- `client/src/App.js`, `client/src/components/layout/Navbar.js`, `client/src/pages/ContentView.js`, and `client/src/utils/studentTipTranslations.js`: routes, role-aware entry points, content-detail shortcut, and NL/ENG labels.
 
 ### Task 1: Add portable storage and pure tip rules
 
@@ -302,7 +302,7 @@ git commit -m "feat: add student tip submission and discovery"
 - Test: `client/src/utils/studentTipReview.test.js`
 - Modify: `client/src/App.js`
 - Modify: `client/src/components/layout/Navbar.js`
-- Modify: `client/src/context/prototypeTranslations.js`
+- Modify: `client/src/utils/studentTipTranslations.js`
 
 **Interfaces:**
 - Add a `ReviewerRoute` that waits for auth loading, redirects unauthenticated users to `/login`, and redirects roles other than `teacher` or `admin` to `/dashboard`.
@@ -347,7 +347,7 @@ Expected: PASS; a student cannot reach the review route, and reviewer actions se
 - [ ] **Step 5: Commit the review UI**
 
 ```bash
-git add client/src/pages/StudentTipReview.js client/src/pages/StudentTipReview.css client/src/utils/studentTipReview.js client/src/utils/studentTipReview.test.js client/src/App.js client/src/components/layout/Navbar.js client/src/context/prototypeTranslations.js
+git add client/src/pages/StudentTipReview.js client/src/pages/StudentTipReview.css client/src/utils/studentTipReview.js client/src/utils/studentTipReview.test.js client/src/App.js client/src/components/layout/Navbar.js client/src/utils/studentTipTranslations.js
 git commit -m "feat: add teacher student tip inbox"
 ```
 

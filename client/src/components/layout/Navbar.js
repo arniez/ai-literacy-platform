@@ -14,10 +14,13 @@ import {
 } from 'react-icons/fa';
 import api from '../../utils/api';
 import LanguageSwitcher from '../common/LanguageSwitcher';
+import { useLanguage } from '../../context/LanguageContext';
+import { translateStudentTipText } from '../../utils/studentTips';
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { language } = useLanguage();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
@@ -125,6 +128,15 @@ const Navbar = () => {
                       >
                         <FaUser /> Profiel
                       </Link>
+                      {['teacher', 'admin'].includes(user?.role) && (
+                        <Link
+                          to="/docent/studenttips"
+                          className="user-menu-link"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <FaUsers /> {translateStudentTipText(language, 'Tips beoordelen')}
+                        </Link>
+                      )}
                       {user?.role === 'admin' && (
                         <Link
                           to="/admin"

@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "AI Literacy Training Application for HBO Students",
   "main": "server/server.js",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
-    "install-all": "cd server && npm install && cd ../client && npm install",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "install-all": "npm ci --prefix server && npm ci --prefix client",
+    "build": "npm run install-all && npm run build --prefix client",
+    "start": "npm start --prefix server",
+    "migrate": "npm run migrate --prefix server",
+    "create-admin": "npm run create-admin --prefix server",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm start --prefix client\""
   },
   "keywords": ["ai", "education", "learning", "gamification"],
   "author": "",

@@ -1,68 +1,17 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 require('./config/env');
-const { testConnection, dbType } = require('./config/db-universal');
-const errorHandler = require('./middleware/errorHandler');
+const { createApp } = require('./app');
+const { testConnection, dbType, pool } = require('./config/db-universal');
 
-// Initialize app
-const app = express();
-
-// Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// CORS
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.CLIENT_URL
-    : ['http://localhost:3000', 'http://192.168.178.79:3000'],
-  credentials: true
-}));
-
-// Security headers
-app.use(helmet());
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 500 // limit each IP to 500 requests per windowMs (increased for development)
-});
-app.use('/api/', limiter);
-
-// Mount routers
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/content', require('./routes/content'));
-app.use('/api/progress', require('./routes/progress'));
-app.use('/api/badges', require('./routes/badges'));
-app.use('/api/challenges', require('./routes/challenges'));
-app.use('/api/social', require('./routes/social'));
-app.use('/api/quiz', require('./routes/quiz'));
-app.use('/api/content-quiz', require('./routes/contentQuiz'));
-app.use('/api/student-tips', require('./routes/studentTips'));
-app.use('/api/integrations/ai-students', require('./routes/aiStudentIntegration'));
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Error handler
-app.use(errorHandler);
-
+const app = createApp({ env: process.env });
 const PORT = process.env.PORT || 5002;
 
-// Connect to database and start server
+let server;
+
 const startServer = async () => {
   try {
     await testConnection();
 
-    app.listen(PORT, '0.0.0.0', () => {
+    server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
@@ -71,7 +20,6 @@ const startServer = async () => {
 ║   Database: ${dbType.toUpperCase()}                                  ║
 ║   Port: ${PORT}                                       ║
 ║   Local: http://localhost:${PORT}                      ║
-║   Network: http://192.168.178.79:${PORT}               ║
 ║                                                    ║
 ╚════════════════════════════════════════════════════╝
       `);
@@ -84,9 +32,25 @@ const startServer = async () => {
 
 startServer();
 
+const shutdown = () => {
+  if (server) {
+    server.close(() => {
+      pool.end().finally(() => process.exit(0));
+    });
+  } else {
+    process.exit(0);
+  }
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
+process.on('unhandledRejection', (err) => {
   console.log(`Error: ${err.message}`);
-  // Close server & exit process
-  server.close(() => process.exit(1));
+  if (server) {
+    server.close(() => process.exit(1));
+  } else {
+    process.exit(1);
+  }
 });

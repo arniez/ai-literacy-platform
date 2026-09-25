@@ -7,8 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node seed-database.js",
-    "db:migrate:student-tips": "node run-student-tips-migration.js",
-    "db:migrate:ai-student-lessons": "node run-ai-student-lessons-migration.js",
+    "migrate": "node db/migrate.js",
     "seed:export": "node export-seed-data.js"
   },
   "dependencies": {

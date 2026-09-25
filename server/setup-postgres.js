@@ -8,6 +8,10 @@ const fs = require('fs');
 const path = require('path');
 require('./config/env');
 
+if (process.env.NODE_ENV === 'production') {
+  throw new Error('Dit script wist de database en draait niet in productie.');
+}
+
 async function setupDatabase() {
   // First, connect to postgres database to create our database
   const setupClient = new Client({
@@ -51,7 +55,7 @@ async function setupDatabase() {
     console.log(`✓ Connected to database: ${process.env.PG_NAME || 'ai_literacy_db'}`);
 
     // Read and execute schema file
-    const schemaPath = path.join(__dirname, 'config', 'database-postgres.sql');
+    const schemaPath = path.join(__dirname, 'config', 'dev-reset-schema.sql');
     const schema = fs.readFileSync(schemaPath, 'utf8');
 
     console.log('✓ Executing schema...');

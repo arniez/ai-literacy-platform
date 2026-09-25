@@ -48,6 +48,7 @@ CREATE TABLE users (
     last_name VARCHAR(50),
     role user_role DEFAULT 'student',
     study_program VARCHAR(100),
+    ai_interests JSONB,
     avatar_url VARCHAR(255),
     bio TEXT,
     total_points INTEGER DEFAULT 0,

@@ -1,92 +1,58 @@
 require('./config/env');
-const { pool } = require('./config/db-postgres');
 const fs = require('fs');
 const path = require('path');
 
-async function seedDatabase() {
-  console.log('🌱 Seeding database with initial data...\n');
+function parseSeedArgs(argv, env = process.env) {
+  const catalog = argv.includes('--catalog') || argv.includes('--all');
+  const demo = argv.includes('--demo') || argv.includes('--all');
 
-  try {
-    // Read seed data file
-    const seedFilePath = path.join(__dirname, 'config', 'seed-data.sql');
+  if (!catalog && !demo) {
+    throw new Error('Specificeer --catalog, --demo of --all.');
+  }
+  if (demo && env.NODE_ENV === 'production') {
+    throw new Error('Demo-data mag niet naar productie: NODE_ENV=production.');
+  }
 
-    if (!fs.existsSync(seedFilePath)) {
-      console.error('❌ Seed file not found:', seedFilePath);
-      console.log('💡 Run "node export-seed-data.js" first to generate seed data');
-      process.exit(1);
-    }
+  return { catalog, demo };
+}
 
-    const seedSQL = fs.readFileSync(seedFilePath, 'utf8');
+async function seedDatabase({ catalog, demo }, { pool }) {
+  if (catalog) {
+    console.log('📦 Catalogus seeden (modules, content, badges, challenges)...');
+    const sql = fs.readFileSync(path.join(__dirname, 'config', 'seed-catalog.sql'), 'utf8');
+    await pool.query(sql);
+    console.log('✅ Catalogus klaar.');
+  }
 
-    console.log('📖 Reading seed data file...');
-    console.log('🗑️  Clearing existing data...\n');
-
-    // Disable foreign key checks temporarily
-    await pool.query('SET session_replication_role = replica;');
-
-    // Clear all tables in reverse order (to handle foreign keys)
-    const tables = [
-      'notifications',
-      'content_ratings',
-      'comments',
-      'user_challenges',
-      'challenges',
-      'user_badges',
-      'badges',
-      'user_progress',
-      'content',
-      'modules',
-      'users'
-    ];
-
-    for (const table of tables) {
-      await pool.query(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
-      console.log(`   ✓ Cleared ${table}`);
-    }
-
-    // Re-enable foreign key checks
-    await pool.query('SET session_replication_role = DEFAULT;');
-
-    console.log('\n💾 Inserting seed data...\n');
-
-    // Split the SQL into individual statements
-    const statements = seedSQL
-      .split('\n')
-      .filter(line => line.trim() && !line.trim().startsWith('--'))
-      .join('\n')
-      .split(';')
-      .filter(stmt => stmt.trim());
-
-    let insertCount = 0;
-    let sequenceCount = 0;
-
-    for (const statement of statements) {
-      const trimmed = statement.trim();
-      if (!trimmed) continue;
-
-      try {
-        await pool.query(trimmed);
-
-        if (trimmed.toLowerCase().startsWith('insert')) {
-          insertCount++;
-        } else if (trimmed.toLowerCase().includes('setval')) {
-          sequenceCount++;
-        }
-      } catch (error) {
-        console.error('❌ Error executing statement:', trimmed.substring(0, 100) + '...');
-        console.error('   Error:', error.message);
-      }
-    }
-
-    console.log(`✅ Database seeded successfully!`);
-    console.log(`📊 Inserted ${insertCount} rows`);
-    console.log(`🔢 Updated ${sequenceCount} sequences\n`);
-
-    await pool.end();
-  } catch (error) {
-    console.error('❌ Seeding error:', error);
-    process.exit(1);
+  if (demo) {
+    console.log('🌱 Demo-data seeden (users, voortgang, badges, comments, ratings, notificaties)...');
+    const sql = fs.readFileSync(path.join(__dirname, 'config', 'seed-demo.sql'), 'utf8');
+    await pool.query(sql);
+    console.log('✅ Demo-data klaar.');
   }
 }
 
-seedDatabase();
+if (require.main === module) {
+  let options;
+  try {
+    options = parseSeedArgs(process.argv.slice(2));
+  } catch (error) {
+    console.error(`❌ ${error.message}`);
+    console.log('💡 Gebruik: node seed-database.js --catalog | --demo | --all');
+    console.log('💡 Draai eerst "npm run migrate" als het schema nog niet up-to-date is.');
+    process.exit(1);
+  }
+
+  const { pool } = require('./config/db-postgres');
+
+  seedDatabase(options, { pool })
+    .catch((error) => {
+      console.error('❌ Seeding error:', error);
+      process.exitCode = 1;
+    })
+    .finally(async () => {
+      await pool.end();
+    });
+}
+
+module.exports = { parseSeedArgs, seedDatabase };

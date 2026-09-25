@@ -8,6 +8,7 @@
     "dev": "nodemon server.js",
     "seed": "node seed-database.js",
     "migrate": "node db/migrate.js",
+    "create-admin": "node scripts/createAdmin.js",
     "seed:export": "node export-seed-data.js"
   },
   "dependencies": {

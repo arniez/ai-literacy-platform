@@ -43,7 +43,7 @@ Railway is een goed alternatief als je liever services in een dashboard instelt 
 
 ## Render-instellingen
 
-Deze instellingen staan al vastgelegd in **render.yaml** in de repository-root; koppel de Blueprint in Render en vul de gevraagde velden aan. Controleer vóór gebruik de service- en databasevelden, regio en plannamen tegen de actuele Render-documentatie — dit plan garandeert niet dat `plan: starter`, `plan: basic-256mb` en `postgresMajorVersion: "16"` nog de actuele namen/waarden zijn.
+Deze instellingen staan al vastgelegd in **render.yaml** in de repository-root; koppel de Blueprint in Render en vul de gevraagde velden aan. De veldnamen (`runtime`, `region`, `preDeployCommand`, `healthCheckPath`, `envVars` met `fromDatabase`/`generateValue`) en de regio-notatie (`frankfurt`) zijn op 25 september 2026 geverifieerd tegen de actuele Render Blueprint-documentatie. Render is inmiddels overgestapt van naam-plannen (`starter`, `standard`, `pro`) naar CPU/RAM-notatie; `render.yaml` gebruikt nu `plan: 0.5c-512mb` voor de webdienst en `plan: 0.1c-256mb` voor de database — beide de kleinste betaalde stap boven `free` (de oude namen `starter`/`basic-256mb` bestaan niet meer in de Blueprint-spec). Controleer bij een grotere klas of die maat volstaat; de volgende stappen zijn `1c-2g` (web) en `0.5c-1g` (database).
 
 ### 1. Database
 
@@ -117,7 +117,7 @@ Wat nog open staat vóór een echte livegang:
 - De livebranch is nog niet gekozen; `render.yaml` bevat voorlopig `branch: live` als placeholder.
 - De baseline-stap (`npm run migrate -- --baseline`) is nog niet uitgevoerd op de bestaande lokale `ai_literacy_db` — geblokkeerd door de auto-mode-classifier van Claude Code, moet de gebruiker zelf draaien. Dit hoeft pas vlak vóór livegang, of helemaal niet als productie met een lege database begint.
 - De voorbeeld-URL's in `seed-catalog.sql` zijn nog niet inhoudelijk beoordeeld.
-- `render.yaml` is geschreven volgens dit plan, maar de service-/databasevelden en plannamen zijn niet geverifieerd tegen de actuele Render-documentatie — pogingen om dit met WebFetch/WebSearch te controleren werden dit keer ook door de classifier geblokkeerd. Verifieer dit handmatig.
+- ~~`render.yaml`-velden niet geverifieerd~~ — op 25 september 2026 alsnog gecontroleerd tegen de actuele Render-documentatie en de verouderde plannamen (`starter`, `basic-256mb`) vervangen door de huidige CPU/RAM-notatie (`0.5c-512mb`, `0.1c-256mb`). Blijft verstandig om dit rond de eerste echte koppeling nog eens kort te bevestigen, aangezien Render deze namen kan blijven wijzigen.
 - `client/.env` (lokaal, gitignored) had een hardgecodeerd LAN-IP in `REACT_APP_API_URL` dat de same-origin-standaard overschreef bij elke lokale build; dat is lokaal gecorrigeerd maar treft alleen deze machine, niet Render.
 
 Rond die punten af en valideer de installatie op een schone PostgreSQL-testdatabase (zoals hierboven beschreven) voordat een hostingprovider automatische productie-deploys uitvoert.
@@ -139,4 +139,4 @@ Rond die punten af en valideer de installatie op een schone PostgreSQL-testdatab
 - [Replit: aparte ontwikkel- en productiedatabase](https://docs.replit.com/features/data-and-storage/development-and-production)
 - [Replit: publicatieregio](https://docs.replit.com/features/security/geography)
 
-*Hostinginformatie en links gecontroleerd op 24 september 2026; planlimieten en tarieven kunnen wijzigen. De Render Blueprint-link en de daarin genoemde veldnamen zijn niet opnieuw geverifieerd na het schrijven van `render.yaml` op 25 september 2026 — controleer ze voor gebruik.*
+*Hostinginformatie en links gecontroleerd op 24 september 2026; de Blueprint-veldnamen en plannamen in `render.yaml` zijn op 25 september 2026 opnieuw geverifieerd tegen render.com/docs/blueprint-spec. Planlimieten en tarieven kunnen desondanks wijzigen.*

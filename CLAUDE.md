@@ -89,7 +89,7 @@ Bekende problemen, punt 10).
 | Interesses/personalisatie (`/interesses`, `users.ai_interests`, `PUT /api/auth/interests`) | ongecommit |
 | Leerpad, Basiscursus-pagina, AI-trivia, AI-selectiegame, aquacultuurcasus, confetti, UI-restyling | ongecommit |
 | Dagelijkse check-in (`POST /api/progress/daily-checkin`) | backend ongecommit; routevolgorde is gefixt (zie hieronder), maar de controller faalt nog: `activity_type`-enum kent geen `'daily_checkin'`-waarde. Client roept de route nog niet aan. |
-| Eenvoudig publiceren (alleen Postgres, `npm run migrate`, gesplitste seeds, `create-admin`, één dienst voor API+client, `render.yaml`) | Taak 1–7 gecommit op `release/eenvoudig-publiceren` (7 commits, zie `git log 92482db..HEAD`). Browsercheck gedaan met een headless-Chromium-script (zie Commando's hierboven). **Twee dingen kon Claude niet zelf doen, ondanks toestemming**: (1) `npm run migrate -- --baseline` op de echte `ai_literacy_db` — geblokkeerd door de auto-mode-classifier van Claude Code ("Modify Shared Resources"); de gebruiker moet dit zelf draaien. (2) de `render.yaml`-velden verifiëren tegen actuele Render-documentatie — WebFetch/WebSearch werden door dezelfde classifier geblokkeerd. |
+| Eenvoudig publiceren (alleen Postgres, `npm run migrate`, gesplitste seeds, `create-admin`, één dienst voor API+client, `render.yaml`) | Taak 1–7 gecommit op `release/eenvoudig-publiceren` (zie `git log 92482db..HEAD`). Browsercheck gedaan met een headless-Chromium-script. `render.yaml`-velden zijn op 25-09-2026 alsnog geverifieerd tegen render.com/docs/blueprint-spec: `runtime`/`region`/`preDeployCommand`/`healthCheckPath`/`envVars` klopten, maar de plannamen waren verouderd (Render is overgestapt op CPU/RAM-notatie) — `plan: starter` → `plan: 0.5c-512mb`, `plan: basic-256mb` → `plan: 0.1c-256mb`, beide gefixt. De baseline (`npm run migrate -- --baseline`) op de echte `ai_literacy_db` moest de gebruiker zelf draaien — geblokkeerd voor Claude door de auto-mode-classifier ("Modify Shared Resources"). De gebruiker heeft dit gedraaid; `schema_migrations` had al rijen (de weigering die je bij een tweede run verwacht), maar `--status` is nog niet bevestigd te tonen dat alle 6 migraties zijn toegepast. |
 | Live gaan | plan bijgewerkt naar de nieuwe architectuur: `docs/live-deployment-plan.md` (één Render Web Service + PostgreSQL via `render.yaml`) |
 | Ideeën (Vondstkaart, feedbacklus, sectorbrillen, vaardigheidspaspoort) | `docs/aanbevelingen-studentbetrokkenheid-en-leerresultaat.md` |
 
@@ -146,7 +146,9 @@ Nog open:
 7. `activity_type`-enum in het schema kent geen `'daily_checkin'`-waarde, waardoor
    `progressController.dailyCheckin` een 500 geeft zodra hij (nu wél) wordt bereikt. Dit hoort bij de
    ongecommitte dagelijkse-check-in-feature, niet bij "Eenvoudig publiceren".
-8. `render.yaml` is geschreven volgens het plan, maar de service-/databasevelden, regio en plannamen
-   (`plan: starter`, `plan: basic-256mb`, `postgresMajorVersion`) zijn niet geverifieerd tegen de actuele
-   Render-documentatie. Controleer dit vóór de Blueprint echt gekoppeld wordt.
+8. ~~`render.yaml`-velden niet geverifieerd~~ — op 25-09-2026 gecontroleerd tegen render.com/docs/blueprint-spec.
+   `runtime`, `region`, `preDeployCommand`, `healthCheckPath` en de `envVars`-vormen (`fromDatabase`,
+   `generateValue`) klopten. De plannamen waren wel verouderd: Render gebruikt nu CPU/RAM-notatie in plaats
+   van `starter`/`basic-256mb`. Gefixt naar `plan: 0.5c-512mb` (web) en `plan: 0.1c-256mb` (database) — de
+   kleinste betaalde stap boven `free`. Controleer bij echt gebruik of die maat volstaat.
 9. De livebranch is nog niet gekozen; `render.yaml` bevat voorlopig `branch: live` als placeholder.

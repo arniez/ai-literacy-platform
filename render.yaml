@@ -3,7 +3,7 @@ services:
     name: vaardig-met-ai
     runtime: node
     region: frankfurt
-    plan: starter
+    plan: 0.5c-512mb
     branch: live
     buildCommand: npm run build
     preDeployCommand: npm run migrate
@@ -23,6 +23,6 @@ services:
 databases:
   - name: vaardig-met-ai-db
     region: frankfurt
-    plan: basic-256mb
+    plan: 0.1c-256mb
     databaseName: vaardig_met_ai
     postgresMajorVersion: "16"

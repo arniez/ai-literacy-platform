@@ -2,12 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const dotenv = require('dotenv');
+require('./config/env');
 const { testConnection, dbType } = require('./config/db-universal');
 const errorHandler = require('./middleware/errorHandler');
-
-// Load env vars
-dotenv.config({ path: './config/config.env' });
 
 // Initialize app
 const app = express();

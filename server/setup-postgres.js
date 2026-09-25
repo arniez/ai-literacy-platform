@@ -6,7 +6,7 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: './config/config.env' });
+require('./config/env');
 
 async function setupDatabase() {
   // First, connect to postgres database to create our database

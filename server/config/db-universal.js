@@ -1,59 +1,37 @@
 /**
- * Universal Database Interface
- * Provides a consistent API that works with both MySQL and PostgreSQL
+ * PostgreSQL database interface
  */
 
-const { pool, testConnection, dbType } = require('./db-factory');
+const { pool, testConnection } = require('./db-postgres');
 const { createTransactionRunner } = require('./transactionRunner');
+
+const dbType = 'postgres';
 
 /**
  * Execute a query with automatic parameter conversion
- * Handles differences between MySQL and PostgreSQL result formats
  */
 async function query(sql, params = []) {
   // Convert ? to $1, $2, $3 for PostgreSQL
-  let convertedSql = sql;
-  if (dbType === 'postgres') {
-    let paramCount = 1;
-    convertedSql = sql.replace(/\?/g, () => `$${paramCount++}`);
-  }
+  let paramCount = 1;
+  const convertedSql = sql.replace(/\?/g, () => `$${paramCount++}`);
 
   const result = await pool.query(convertedSql, params);
 
-  // Normalize result format
-  if (dbType === 'postgres') {
-    // PostgreSQL format: { rows: [...], rowCount: n, ... }
-    return [result.rows, result];
-  } else {
-    // MySQL format: [rows, fields]
-    return result;
-  }
+  // Normalize result format: { rows: [...], rowCount: n, ... } -> [rows, result]
+  return [result.rows, result];
 }
 
 /**
- * Get the last inserted ID
- * Works differently in MySQL vs PostgreSQL
+ * Get the last inserted ID from a RETURNING row
  */
 function getInsertId(result, returnedRow = null) {
-  if (dbType === 'postgres') {
-    // PostgreSQL requires RETURNING clause
-    return returnedRow ? returnedRow.id : null;
-  } else {
-    // MySQL has insertId property
-    return result.insertId;
-  }
+  return returnedRow ? returnedRow.id : null;
 }
 
 /**
- * Add RETURNING clause for PostgreSQL INSERT/UPDATE
- * Returns query unchanged for MySQL
+ * Add RETURNING clause for INSERT/UPDATE
  */
 function withReturning(sql, columns = 'id') {
-  if (dbType !== 'postgres') {
-    return sql;
-  }
-
-  // Add RETURNING clause if not present
   if (!sql.toLowerCase().includes('returning')) {
     const trimmed = sql.trim();
     if (trimmed.toLowerCase().startsWith('insert') ||
@@ -67,31 +45,21 @@ function withReturning(sql, columns = 'id') {
 
 /**
  * Execute INSERT and return the new ID
- * Automatically handles RETURNING for PostgreSQL
  */
 async function insertAndGetId(sql, params = []) {
   const insertSql = withReturning(sql, 'id');
   const [rows] = await query(insertSql, params);
-
-  if (dbType === 'postgres') {
-    return rows[0]?.id || null;
-  } else {
-    return rows?.insertId ?? null;
-  }
+  return rows[0]?.id || null;
 }
 
 /**
  * Get affected rows count
  */
 function getAffectedRows(result) {
-  if (dbType === 'postgres') {
-    return result.rowCount || 0;
-  } else {
-    return result.affectedRows || 0;
-  }
+  return result.rowCount || 0;
 }
 
-const withTransaction = createTransactionRunner({ dbType, pool });
+const withTransaction = createTransactionRunner({ pool });
 
 module.exports = {
   pool,

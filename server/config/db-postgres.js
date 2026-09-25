@@ -1,27 +1,14 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: './config/config.env' });
+require('./env');
+const { buildPoolConfig } = require('./dbConfig');
 
-const pool = new Pool({
-  host: process.env.PG_HOST || 'localhost',
-  user: process.env.PG_USER || 'postgres',
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_NAME || 'ai_literacy_db',
-  port: process.env.PG_PORT || 5432,
-  max: 10, // maximum number of clients in the pool
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+const pool = new Pool(buildPoolConfig(process.env));
 
 // Test connection
 const testConnection = async () => {
-  try {
-    const client = await pool.connect();
-    console.log('PostgreSQL Database Connected Successfully');
-    client.release();
-  } catch (error) {
-    console.error('Database Connection Error:', error.message);
-    process.exit(1);
-  }
+  const client = await pool.connect();
+  console.log('PostgreSQL Database Connected Successfully');
+  client.release();
 };
 
 // Helper function to execute queries with consistent error handling

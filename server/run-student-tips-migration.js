@@ -1,10 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, 'config', 'config.env') });
+require('./config/env');
 
 const MIGRATIONS = {
-  postgres: 'add-student-tips.postgres.sql',
-  mysql: 'add-student-tips.mysql.sql'
+  postgres: 'add-student-tips.postgres.sql'
 };
 
 function getMigrationFilename(dbType) {
@@ -16,8 +15,8 @@ function getMigrationFilename(dbType) {
 }
 
 async function runMigration({ dbType, pool, migrationsDirectory } = {}) {
-  const database = pool ? null : require('./config/db-factory');
-  const selectedDbType = dbType || database?.dbType || process.env.DB_TYPE || 'mysql';
+  const database = pool ? null : require('./config/db-universal');
+  const selectedDbType = dbType || database?.dbType || process.env.DB_TYPE || 'postgres';
   const filename = getMigrationFilename(selectedDbType);
   const migrationPath = path.join(
     migrationsDirectory || path.join(__dirname, 'migrations'),
@@ -48,7 +47,7 @@ if (require.main === module) {
     })
     .finally(async () => {
       try {
-        const database = require('./config/db-factory');
+        const database = require('./config/db-universal');
         await database.pool.end();
       } catch (error) {
         if (!process.exitCode) {

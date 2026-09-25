@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './config/config.env' });
+require('./config/env');
 const { pool } = require('./config/db-postgres');
 
 async function createBadge() {

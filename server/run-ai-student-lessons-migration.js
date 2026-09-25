@@ -1,10 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, 'config', 'config.env') });
+require('./config/env');
 
 const MIGRATIONS = {
   postgres: 'add-ai-student-lessons.postgres.sql',
-  mysql: 'add-ai-student-lessons.mysql.sql',
 };
 
 function getMigrationFilename(dbType) {
@@ -14,8 +13,8 @@ function getMigrationFilename(dbType) {
 }
 
 async function runMigration({ dbType, pool, migrationsDirectory } = {}) {
-  const database = pool ? null : require('./config/db-factory');
-  const selectedDbType = dbType || database?.dbType || process.env.DB_TYPE || 'mysql';
+  const database = pool ? null : require('./config/db-universal');
+  const selectedDbType = dbType || database?.dbType || process.env.DB_TYPE || 'postgres';
   const filename = getMigrationFilename(selectedDbType);
   const migrationPath = path.join(migrationsDirectory || path.join(__dirname, 'migrations'), filename);
   const migrationSql = fs.readFileSync(migrationPath, 'utf8');
@@ -30,7 +29,7 @@ if (require.main === module) {
     .then((filename) => console.log(`AI student lessons migration completed: ${filename}`))
     .catch((error) => { console.error('AI student lessons migration failed:', error.message); process.exitCode = 1; })
     .finally(async () => {
-      try { await require('./config/db-factory').pool.end(); } catch (error) {
+      try { await require('./config/db-universal').pool.end(); } catch (error) {
         if (!process.exitCode) { console.error('Could not close the database pool:', error.message); process.exitCode = 1; }
       }
     });

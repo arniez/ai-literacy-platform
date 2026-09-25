@@ -1,63 +1,77 @@
 # Database Seeding
 
-This directory contains scripts to seed the PostgreSQL database with initial data.
+This directory contains the schema, migrations and seed data for the PostgreSQL database.
 
 ## Files
 
-- **`seed-data.sql`** - SQL file containing all seed data (auto-generated)
-- **`seed-database.js`** - Script to load seed data into PostgreSQL
-- **`export-seed-data.js`** - Script to export current database to seed file
+- **`migrations/postgres/`** - Numbered, non-destructive schema migrations, applied with `npm run migrate`
+  (`db/migrate.js`). Never edit an existing migration; add a new `NNN_name.sql` file instead.
+- **`config/seed-catalog.sql`** - The course catalog: modules, content, badges, challenges. Safe to run
+  against a production database. Idempotent via `ON CONFLICT (id) DO NOTHING`.
+- **`config/seed-demo.sql`** - Demo accounts and their activity (progress, badges, comments, ratings,
+  notifications). Local development only.
+- **`seed-database.js`** - Loads one or both seed files.
+- **`export-seed-data.js`** - Exports the current database into a single combined seed file (legacy format;
+  useful for regenerating `seed-catalog.sql`/`seed-demo.sql` by hand after a schema change).
+- **`config/dev-reset-schema.sql`** - Destructive, drop-and-recreate schema for a clean local reinstall.
+  Development only; scripts that run it refuse under `NODE_ENV=production`.
 
 ## Usage
 
-### Loading Seed Data
-
-To seed a fresh database with initial data:
+### First-time setup
 
 ```bash
-# Make sure PostgreSQL is running and database is created
-npm run seed
-
-# Or manually:
-node seed-database.js
+createdb -U postgres ai_literacy_db
+npm run migrate                    # applies migrations/postgres/*.sql
+node seed-database.js --all        # catalog + demo accounts
 ```
 
-This will:
-1. Clear all existing data from tables
-2. Insert all seed data (users, modules, content, etc.)
-3. Update sequences to correct values
-
-⚠️ **Warning**: This will DELETE all existing data in the database!
-
-### Exporting Current Data
-
-To export the current database state as seed data:
+### Loading only the catalog (safe for production)
 
 ```bash
-# Export all data to seed-data.sql
+node seed-database.js --catalog
+```
+
+This inserts modules, content, badges and challenges with `ON CONFLICT (id) DO NOTHING`, so running it again
+does nothing destructive — it only adds rows that aren't there yet. It does **not** clear or replace existing
+content.
+
+For the local student prototype, add the explicit interest labels and the aquaculture practice case after
+seeding the catalog:
+
+```bash
+npm run db:import:content-interests
+```
+
+This import is repeatable: it keeps existing content tags and publication choices, updates only missing
+interest labels, and creates the practice case only once. It does not clear or replace database content.
+
+### Loading demo accounts (local development only)
+
+```bash
+node seed-database.js --demo
+```
+
+This refuses to run when `NODE_ENV=production`. It never clears existing data; the demo rows use fixed IDs
+with `ON CONFLICT (id) DO NOTHING`, so it depends on the catalog seed already being applied (it references
+catalog content/badge IDs).
+
+### Exporting current data
+
+```bash
 node export-seed-data.js
 ```
 
-This will update `config/seed-data.sql` with the current database contents.
+This writes the current database contents to a combined seed file — regenerate `seed-catalog.sql` /
+`seed-demo.sql` from that manually if the schema or content has changed significantly.
 
 ## Seed Data Contents
 
-The seed file includes:
+- **Catalog** (`seed-catalog.sql`): 4 modules, 37 content items, 10 badges, 4 challenges.
+- **Demo** (`seed-demo.sql`): 14 users, 11 user progress records, 8 awarded badges, 4 comments, 5 content
+  ratings, 9 notifications.
 
-- **14 users** - Admin, teachers, and students with various roles
-- **4 modules** - Learning modules (AI Basics, Applications, Critical Thinking, Practical Skills)
-- **37 content items** - Videos, courses, podcasts, games, case studies
-- **11 user progress records** - Student progress tracking
-- **10 badges** - Achievement badges
-- **8 user badges** - Awarded badges
-- **4 challenges** - Learning challenges
-- **4 comments** - Content comments
-- **5 content ratings** - User ratings
-- **9 notifications** - User notifications
-
-## Default Accounts
-
-After seeding, you can login with:
+## Default Accounts (local development only — never seeded into production)
 
 ### Admin Account
 - **Email**: `admin@ailiteracy.nl`
@@ -74,37 +88,19 @@ After seeding, you can login with:
 - **Password**: `password123`
 - **Role**: Teacher
 
-## NPM Scripts
-
-Add these to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "seed": "node seed-database.js",
-    "seed:export": "node export-seed-data.js"
-  }
-}
-```
-
 ## Production Deployment
 
-For production deployment (Supabase, Railway, Render, etc.):
+Production never uses the schema-reset or the demo seed. The sequence is:
 
-1. Create database and run schema:
-   ```bash
-   node setup-postgres.js
-   ```
-
-2. Load seed data:
-   ```bash
-   node seed-database.js
-   ```
-
-Or combine both steps:
 ```bash
-node setup-postgres.js && node seed-database.js
+npm run migrate                    # applies pending migrations, never drops anything
+npm run create-admin               # bootstrap the first admin/teacher account safely
+node seed-database.js --catalog    # course catalog only, after reviewing its content
 ```
+
+`seed-database.js --demo` and `--all` refuse to run when `NODE_ENV=production`. `config/dev-reset-schema.sql`
+and the scripts that run it (`setup-postgres.js`, `setup-and-seed-ai-lit-stud.js`) also refuse under
+`NODE_ENV=production` — they are for a clean local reinstall only.
 
 ## Troubleshooting
 
@@ -116,17 +112,10 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_user;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_user;
 ```
 
-### Foreign Key Errors
-The seed script automatically handles foreign key constraints by:
-1. Temporarily disabling them during truncate
-2. Loading data in correct order
-3. Re-enabling constraints
-
 ### Sequence Issues
-If IDs are not auto-incrementing after seeding, the sequences need updating:
+Both seed files call `setval(...)` for every table they touch after inserting, so IDs keep auto-incrementing
+correctly afterwards. If you ever load data another way and sequences get out of sync:
 ```sql
 SELECT setval('users_id_seq', (SELECT MAX(id) FROM users), true);
 -- Repeat for all tables
 ```
-
-This is handled automatically by the seed script.

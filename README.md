@@ -89,100 +89,51 @@ A comprehensive, full-stack learning platform for AI literacy education, featuri
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js** (v14 or higher) - [Download](https://nodejs.org/)
-- **PostgreSQL** (v12 or higher) - [Download](https://www.postgresql.org/download/)
-- **npm** or **yarn** - Package manager
+- **Node.js 24.x** (pinned in `.nvmrc`) - [Download](https://nodejs.org/)
+- **PostgreSQL** (v14 or higher) - this platform uses **PostgreSQL only** - [Download](https://www.postgresql.org/download/)
+- **npm** - Package manager
 - **Git** (optional) - Version control
 
-## 🚀 Quick Start
+## 🚀 Getting started
 
-### 1. Clone the Repository
+There are three routes, depending on what you're doing.
+
+### 1. Local development
 
 ```bash
 git clone https://github.com/arniez/ai-literacy-platform.git
 cd ai-literacy-platform
-```
 
-### 2. Install Dependencies
-
-```bash
-# Install server dependencies
-cd server
-npm install
-
-# Install client dependencies
-cd ../client
-npm install
-```
-
-### 3. Configure Database
-
-Create PostgreSQL database:
-```bash
 createdb -U postgres ai_literacy_db
+# create server/config/config.env with PG_HOST, PG_USER, PG_PASSWORD, PG_NAME, PG_PORT and JWT_SECRET
+# (or set DATABASE_URL instead of the separate PG_* fields)
+
+npm run migrate                    # applies server/migrations/postgres/*.sql
+node server/seed-database.js --all # course catalog + demo accounts (local only)
+npm run dev                        # server (nodemon) + client (CRA) with hot reload
 ```
 
-Import schema:
-```bash
-psql -U postgres -d ai_literacy_db -f server/config/database-postgres.sql
-```
+The app opens at [http://localhost:3000](http://localhost:3000); the CRA dev proxy forwards `/api` to `http://localhost:5002`.
 
-### 4. Configure Environment Variables
+**Demo accounts** (only created locally by `--all` or `--demo`, never seeded into production — see below):
+- Admin: `admin@ailiteracy.nl` / `password123`
+- Student: `student@student.nl` / `password123`
 
-Create `server/.env`:
-
-```env
-# Database Configuration
-DB_TYPE=postgres
-DB_HOST=localhost
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_NAME=ai_literacy_db
-DB_PORT=5432
-
-# Server Configuration
-PORT=5002
-NODE_ENV=development
-
-# JWT Configuration
-JWT_SECRET=your_secret_key_at_least_32_characters_long
-JWT_EXPIRE=30d
-```
-
-### 5. Seed Demo Data
+### 2. Testing a production build locally
 
 ```bash
-cd server
-node seed-database.js
+cd client && npm run build && cd ..
+NODE_ENV=production DATABASE_URL=postgres://postgres:<pw>@localhost:5432/ai_literacy_db JWT_SECRET=<test-secret> PORT=5050 node server/server.js
 ```
 
-### 6. Start the Application
+One Express server now serves both the API and the built React app on the same port — no CORS, no `REACT_APP_API_URL`. Walk through: home, login, dashboard, a content page with a YouTube video (no CSP errors in the console), a direct browser refresh on `/basiscursus`, the admin "AI voor studenten" tab, and check that `curl localhost:5050/api/health/ready` returns 200.
 
-**Terminal 1 - Backend:**
-```bash
-cd server
-npm start
-```
+### 3. Publishing to Render
 
-**Terminal 2 - Frontend:**
-```bash
-cd client
-npm start
-```
-
-The application will open at [http://localhost:3000](http://localhost:3000)
-
-## 🔐 Demo Accounts
-
-After seeding the database, use these credentials:
-
-**Admin:**
-- Email: `admin@ailiteracy.nl`
-- Password: `password123`
-
-**Student:**
-- Email: `student@student.nl`
-- Password: `password123`
+1. Connect the repository as a Render Blueprint (`render.yaml` in the repo root describes one Web Service plus a managed PostgreSQL database).
+2. After the first deploy, run `npm run create-admin` once via the Render Shell to bootstrap the first admin account (password via `ADMIN_PASSWORD` or the hidden prompt — never as a CLI argument).
+3. Run `node server/seed-database.js --catalog` to load the course catalog, after reviewing its content (some example URLs are placeholders — see `docs/live-deployment-plan.md`). Never run `--demo` or `--all` against production; the script refuses that itself when `NODE_ENV=production`.
+4. Follow the full acceptance checklist in [`docs/live-deployment-plan.md`](docs/live-deployment-plan.md) before opening it up to students.
 
 ## 📁 Project Structure
 
@@ -224,18 +175,30 @@ AILiteracy/
 │       └── index.js
 │
 ├── server/                     # Express Backend
+│   ├── app.js                  # createApp({ env }) — the actual Express app, testable without listening
+│   ├── server.js                # Entry point: createApp + testConnection + listen
+│   ├── db/
+│   │   └── migrate.js           # Migration runner (schema_migrations, --status, --baseline)
+│   ├── migrations/postgres/     # Numbered, non-destructive migrations (000_base_schema.sql, 001..005)
+│   ├── scripts/
+│   │   └── createAdmin.js       # npm run create-admin — bootstrap the first admin/teacher
 │   ├── config/
-│   │   ├── .env               # Environment variables
-│   │   ├── db-postgres.js     # PostgreSQL connection
-│   │   ├── db-universal.js    # Universal DB adapter
-│   │   └── database-postgres.sql  # Database schema
+│   │   ├── config.env           # Local environment variables (gitignored)
+│   │   ├── env.js                # Loads config.env once via an absolute path
+│   │   ├── dbConfig.js           # Builds the pg pool config from DATABASE_URL or PG_* + TLS
+│   │   ├── db-postgres.js       # PostgreSQL pool
+│   │   ├── db-universal.js      # query/insertAndGetId/withTransaction used by controllers
+│   │   ├── security.js          # CSP, CORS and rate-limit configuration
+│   │   ├── seed-catalog.sql     # Course catalog seed — safe for production
+│   │   ├── seed-demo.sql        # Demo accounts and activity — local development only
+│   │   └── dev-reset-schema.sql # Destructive reset schema — dev only, refuses under NODE_ENV=production
 │   ├── controllers/
 │   │   ├── authController.js
 │   │   ├── badgeController.js
 │   │   ├── challengeController.js
-│   │   ├── contentController.js     # PostgreSQL optimized
-│   │   ├── contentQuizController.js # Quiz integration
-│   │   ├── quizController.js        # Quiz management
+│   │   ├── contentController.js
+│   │   ├── contentQuizController.js
+│   │   ├── quizController.js
 │   │   ├── progressController.js
 │   │   └── socialController.js
 │   ├── middleware/
@@ -250,18 +213,13 @@ AILiteracy/
 │   │   ├── quiz.js
 │   │   ├── progress.js
 │   │   └── social.js
-│   ├── migrations/
-│   │   ├── add-quiz-system.sql
-│   │   └── add-content-quiz.sql
 │   ├── utils/
 │   │   └── generateToken.js
-│   ├── seed-database.js       # Database seeding
-│   └── server.js              # Entry point
+│   └── seed-database.js       # node seed-database.js --catalog | --demo | --all
 │
 ├── backups/                   # Database backups
-├── README.md                  # This file
-├── QUICKSTART.md             # Quick setup guide
-└── INSTALL.md                # Detailed installation
+├── render.yaml                 # Render Blueprint (one Web Service + PostgreSQL)
+└── README.md                  # This file
 ```
 
 ## 🔌 API Endpoints
@@ -402,27 +360,7 @@ Main tables:
 
 ## 🌐 Deployment
 
-### Backend Deployment (Example: Heroku)
-
-```bash
-# Add PostgreSQL addon
-heroku addons:create heroku-postgresql:hobby-dev
-
-# Set environment variables
-heroku config:set JWT_SECRET=your_secret
-heroku config:set NODE_ENV=production
-
-# Deploy
-git push heroku main
-```
-
-### Frontend Deployment (Example: Vercel)
-
-```bash
-cd client
-npm run build
-vercel --prod
-```
+See "Getting started → 3. Publishing to Render" above for the short version, and [`docs/live-deployment-plan.md`](docs/live-deployment-plan.md) for the full plan and acceptance checklist. In short: one Render Web Service (built from `render.yaml`) serves both the API and the React app from the same origin, with `preDeployCommand: npm run migrate` applying schema changes before each deploy.
 
 ## 🐛 Troubleshooting
 
@@ -469,18 +407,18 @@ npm start
 ### Database Migrations
 
 ```bash
-# Run quiz migration
-node run-quiz-migration.js
-
-# Run content quiz migration
-node run-content-quiz-migration.js
+npm run migrate              # apply pending migrations in server/migrations/postgres/
+npm run migrate -- --status  # show which migrations are applied
 ```
+
+To add a schema change, add a new `server/migrations/postgres/NNN_name.sql` file — never edit an existing one.
 
 ### Re-seed Database
 
 ```bash
-cd server
-node seed-database.js
+node server/seed-database.js --catalog  # course catalog (modules, content, badges, challenges)
+node server/seed-database.js --demo     # demo accounts and activity (refuses under NODE_ENV=production)
+node server/seed-database.js --all      # both
 ```
 
 ## 🤝 Contributing
@@ -508,14 +446,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📚 Documentation
 
-- **Quick Start Guide** - See [QUICKSTART.md](QUICKSTART.md)
-- **Installation Guide** - See [INSTALL.md](INSTALL.md)
-- **Database Schema** - See [server/config/database-postgres.sql](server/config/database-postgres.sql)
+- **Deployment plan and acceptance checklist** - See [docs/live-deployment-plan.md](docs/live-deployment-plan.md)
+- **Database schema** - See [server/migrations/postgres/](server/migrations/postgres/) (numbered migrations; never edit an existing one)
 
 ## 🔗 Links
 
 - **Repository**: https://github.com/arniez/ai-literacy-platform
-- **Current Branch**: ailiteracy11
 
 ## 📈 Roadmap
 

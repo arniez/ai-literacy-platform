@@ -109,13 +109,16 @@ Houd eerdere succesvolle deploys beschikbaar. Bij een fout kan de dienst naar ee
 
 ## Huidige releasegereedheid
 
-De drie grootste blokkades uit de vorige versie van dit plan zijn opgelost: er is een niet-destructieve migratieweg (`npm run migrate`), een veilige eerste-beheerder-bootstrap (`npm run create-admin`), en de destructieve resetfile weigert nu onder `NODE_ENV=production`. Wat nog open staat vóór een echte livegang:
+De drie grootste blokkades uit de vorige versie van dit plan zijn opgelost: er is een niet-destructieve migratieweg (`npm run migrate`), een veilige eerste-beheerder-bootstrap (`npm run create-admin`), en de destructieve resetfile weigert nu onder `NODE_ENV=production`. Een headless-browsersessie tegen een productie-build (tegen een wegwerptestdatabase) bevestigde login, de beveiligde pagina's, een echte YouTube-embed zonder CSP-fouten, de Engelse taalwisseling en een mobiele viewport — en vond daarbij een echte bug: CORS gaf een 500 op elk same-origin POST-verzoek omdat de origin-check een `Error` teruggaf in plaats van gewoon geen CORS-header te zetten. Dat is gefixt (`server/config/security.js`) en met regressietests afgedekt.
+
+Wat nog open staat vóór een echte livegang:
 
 - De werkmap bevat nog steeds grote hoeveelheden niet-gecommitte wijzigingen naast de "Eenvoudig publiceren"-commits; die moeten eerst in logische commits worden opgesplitst (zie CLAUDE.md).
 - De livebranch is nog niet gekozen; `render.yaml` bevat voorlopig `branch: live` als placeholder.
-- De baseline-stap (`npm run migrate -- --baseline`) is nog niet uitgevoerd op de bestaande lokale `ai_literacy_db` — dat hoeft pas vlak vóór livegang, of helemaal niet als productie met een lege database begint.
+- De baseline-stap (`npm run migrate -- --baseline`) is nog niet uitgevoerd op de bestaande lokale `ai_literacy_db` — geblokkeerd door de auto-mode-classifier van Claude Code, moet de gebruiker zelf draaien. Dit hoeft pas vlak vóór livegang, of helemaal niet als productie met een lege database begint.
 - De voorbeeld-URL's in `seed-catalog.sql` zijn nog niet inhoudelijk beoordeeld.
-- `render.yaml` is geschreven volgens dit plan, maar de service-/databasevelden en plannamen zijn niet geverifieerd tegen de actuele Render-documentatie.
+- `render.yaml` is geschreven volgens dit plan, maar de service-/databasevelden en plannamen zijn niet geverifieerd tegen de actuele Render-documentatie — pogingen om dit met WebFetch/WebSearch te controleren werden dit keer ook door de classifier geblokkeerd. Verifieer dit handmatig.
+- `client/.env` (lokaal, gitignored) had een hardgecodeerd LAN-IP in `REACT_APP_API_URL` dat de same-origin-standaard overschreef bij elke lokale build; dat is lokaal gecorrigeerd maar treft alleen deze machine, niet Render.
 
 Rond die punten af en valideer de installatie op een schone PostgreSQL-testdatabase (zoals hierboven beschreven) voordat een hostingprovider automatische productie-deploys uitvoert.
 

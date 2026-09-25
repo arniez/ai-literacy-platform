@@ -32,7 +32,7 @@ Docenten/admins beheren content, beoordelen studenttips en kiezen lessen uit de 
 ```bash
 # server (vanuit server/)
 npm run dev                      # nodemon
-node --test tests/*.test.js      # 84 unit-tests, geen DB nodig (Windows: bestanden los opgeven)
+node --test tests/*.test.js      # 86 unit-tests, geen DB nodig (Windows: bestanden los opgeven)
 npm run migrate                  # past openstaande migraties toe (server/migrations/postgres/*.sql)
 npm run migrate -- --status      # toont welke migraties zijn toegepast
 npm run migrate -- --baseline [--up-to 005]   # markeert migraties als toegepast zonder ze te draaien
@@ -52,8 +52,13 @@ npm test -- --watchAll=false
 npm run build
 ```
 
-Op 25-09-2026 slaagden alle 84 servertests (na het plan "Eenvoudig publiceren", taken 1–5). Clienttests zijn
-toen niet gedraaid; `npm run build` van de client wel (nodig voor de productiemodus-check van Taak 4).
+Op 25-09-2026 slaagden na het plan "Eenvoudig publiceren" (taken 1–7): 86 servertests, 41 clienttests, en
+`npm run build` vanaf de root (met een verse `npm ci` voor server én client — dat legde een niet meer
+kloppende `client/package-lock.json` bloot, inmiddels gefixt, zie hieronder). Een headless-Chromium-sessie
+(Playwright) tegen een build in productiemodus bevestigde: login, dashboard/basiscursus/leermaterialen,
+Beheer + "AI voor studenten"-tab, een echte YouTube-embed zonder CSP-fouten, de Engelse taalwisseling en een
+mobiele viewport — allemaal zonder consolefouten. Dat proces vond en repareerde meteen een echte bug (zie
+Bekende problemen, punt 10).
 
 ## Werkafspraken (uit specs/plans)
 
@@ -84,7 +89,7 @@ toen niet gedraaid; `npm run build` van de client wel (nodig voor de productiemo
 | Interesses/personalisatie (`/interesses`, `users.ai_interests`, `PUT /api/auth/interests`) | ongecommit |
 | Leerpad, Basiscursus-pagina, AI-trivia, AI-selectiegame, aquacultuurcasus, confetti, UI-restyling | ongecommit |
 | Dagelijkse check-in (`POST /api/progress/daily-checkin`) | backend ongecommit; routevolgorde is gefixt (zie hieronder), maar de controller faalt nog: `activity_type`-enum kent geen `'daily_checkin'`-waarde. Client roept de route nog niet aan. |
-| Eenvoudig publiceren (alleen Postgres, `npm run migrate`, gesplitste seeds, `create-admin`, één dienst voor API+client, `render.yaml`) | Taak 1–5 gecommit op `release/eenvoudig-publiceren` (zie commits `refactor:`/`feat:`/`chore:` op die branch); Taak 6 (deze doc-update) en Taak 7 (eindcontrole) lopen. Baseline van `npm run migrate -- --baseline` op de echte `ai_literacy_db` is **nog niet uitgevoerd** (geblokkeerd door de auto-mode-classifier van Claude Code — moet de gebruiker zelf draaien, of expliciet toestemming geven). |
+| Eenvoudig publiceren (alleen Postgres, `npm run migrate`, gesplitste seeds, `create-admin`, één dienst voor API+client, `render.yaml`) | Taak 1–7 gecommit op `release/eenvoudig-publiceren` (7 commits, zie `git log 92482db..HEAD`). Browsercheck gedaan met een headless-Chromium-script (zie Commando's hierboven). **Twee dingen kon Claude niet zelf doen, ondanks toestemming**: (1) `npm run migrate -- --baseline` op de echte `ai_literacy_db` — geblokkeerd door de auto-mode-classifier van Claude Code ("Modify Shared Resources"); de gebruiker moet dit zelf draaien. (2) de `render.yaml`-velden verifiëren tegen actuele Render-documentatie — WebFetch/WebSearch werden door dezelfde classifier geblokkeerd. |
 | Live gaan | plan bijgewerkt naar de nieuwe architectuur: `docs/live-deployment-plan.md` (één Render Web Service + PostgreSQL via `render.yaml`) |
 | Ideeën (Vondstkaart, feedbacklus, sectorbrillen, vaardigheidspaspoort) | `docs/aanbevelingen-studentbetrokkenheid-en-leerresultaat.md` |
 
@@ -122,6 +127,17 @@ Opgelost tijdens "Eenvoudig publiceren" (Taak 1–4):
    geweigerd onder `NODE_ENV=production`.
 6. ~~`/api/health` controleert de database niet~~ — nieuwe route `/api/health/ready` doet een echte
    `SELECT 1` met timeout; `/api/health` blijft een pure liveness-check.
+10. ~~CORS gaf een 500 op elk same-origin POST/PUT/DELETE-verzoek in productie~~ — gevonden via de
+    Playwright-browsercheck (curl stuurt geen `Origin`-header, dus die miste dit). `buildCorsOptions` gaf
+    een `Error` terug voor een niet-toegestane origin; de `cors`-package zet dat om in `next(err)` (een 500
+    die het hele verzoek blokkeert), terwijl een browser ook bij een same-origin POST een `Origin`-header
+    meestuurt. Fix: `callback(null, false)` in plaats van een `Error` — geen CORS-headers, maar het verzoek
+    gaat gewoon door. Zie `server/config/security.js` en de regressietests in `security.test.js`/`app.test.js`.
+11. **Lokaal alleen**, niet gecommit (`.env` is gitignored en stond nooit in git): `client/.env` had
+    `REACT_APP_API_URL` hardgecodeerd naar het LAN-IP `192.168.178.79:5002`, wat de `'/api'`-standaard uit
+    Taak 4 stilletjes overschreef bij élke lokale build. Aangepast naar een lege/uitgecommentarieerde
+    waarde. Render ziet dit bestand nooit (gitignored), dus dit trof alleen lokaal testen — maar wel
+    precies het scenario dat Taak 4's productiemodus-check zou moeten dekken.
 
 Nog open:
 

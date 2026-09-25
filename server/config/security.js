@@ -30,10 +30,13 @@ function buildCorsOptions(env = {}) {
   return {
     origin(origin, callback) {
       // No Origin header means same-origin or a non-browser client; always allow.
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error('Not allowed by CORS'));
+      // An Origin header that isn't in the allowlist gets `false`, not an error: the
+      // `cors` package turns an Error into a 500 that blocks the request entirely, but a
+      // same-origin browser request also carries an Origin header (e.g. on POST) and must
+      // still succeed — it just doesn't need (or get) an Access-Control-Allow-Origin header.
+      // `false` omits the CORS headers without failing the request; the browser's own
+      // same-origin policy is what actually protects a *cross*-origin caller here.
+      callback(null, !origin || allowedOrigins.includes(origin));
     },
     credentials: true,
   };

@@ -71,3 +71,20 @@ test('POST /api/progress/daily-checkin without a token is rejected by protect, n
     server.close();
   }
 });
+
+test('a same-origin POST (Origin header present, not in any allowlist) is not turned into a 500 by CORS', async () => {
+  // Regression test: browsers send an Origin header on same-origin POSTs too. In production
+  // with no CORS_ORIGINS set, that origin is never "allowed", but it must still reach the
+  // route instead of being errored out by the cors middleware.
+  const app = createApp({ env: { CLIENT_BUILD_PATH: makeFakeBuildDir(), NODE_ENV: 'production' } });
+  const server = await listen(app);
+  try {
+    const res = await fetch(`${baseUrl(server)}/api/progress/daily-checkin`, {
+      method: 'POST',
+      headers: { Origin: baseUrl(server) },
+    });
+    assert.equal(res.status, 401); // reaches `protect`, not a CORS-triggered 500
+  } finally {
+    server.close();
+  }
+});

@@ -15,9 +15,18 @@ function callOrigin(corsOptions, origin) {
   });
 }
 
-test('in production without CORS_ORIGINS, a foreign origin is rejected', async () => {
+test('in production without CORS_ORIGINS, a foreign origin gets no Allow-Origin header', async () => {
   const options = buildCorsOptions({ NODE_ENV: 'production' });
-  await assert.rejects(callOrigin(options, 'https://evil.example.com'));
+  assert.equal(await callOrigin(options, 'https://evil.example.com'), false);
+});
+
+test('an origin outside the allowlist never errors the request (that would 500 same-origin POSTs too)', async () => {
+  // Browsers send an Origin header on same-origin POST/PUT/DELETE requests too, not just
+  // cross-origin ones. If an unlisted origin rejected with an Error, the `cors` package
+  // would turn that into next(err) and every same-origin form submission in production
+  // (no CORS_ORIGINS configured) would 500 instead of just not getting CORS headers.
+  const options = buildCorsOptions({ NODE_ENV: 'production' });
+  await assert.doesNotReject(callOrigin(options, 'https://anything.example.com'));
 });
 
 test('in production, requests with no Origin header (same-origin) are allowed', async () => {
